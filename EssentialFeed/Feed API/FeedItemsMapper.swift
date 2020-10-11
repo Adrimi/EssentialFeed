@@ -10,6 +10,10 @@ import Foundation
 internal final class FeedItemsMapper {
     private struct Root: Decodable {
         let items: [Item]
+        
+        var feed: [FeedItem] {
+            items.map(\.feedItem)
+        }
     }
 
     // API representation of model. Thus "FeedItem" does not have information of the API implementation and it separate concern of difference in API model and in-app model!
@@ -26,13 +30,12 @@ internal final class FeedItemsMapper {
     
     static private var ACK_200: Int { 200 }
     
-    internal static func map(_ data: Data, _ response: HTTPURLResponse) throws -> [FeedItem] {
-        guard response.statusCode == ACK_200 else {
-            throw RemoteFeedLoader.Error.invalidData
+    internal static func map(_ data: Data, from response: HTTPURLResponse) -> RemoteFeedLoader.Result {
+        guard response.statusCode == ACK_200,
+              let root = try? JSONDecoder().decode(Root.self, from: data) else {
+            return .failure(.invalidData)
         }
-        return try JSONDecoder()
-            .decode(Root.self, from: data)
-            .items
-            .map(\.feedItem)
+        
+        return .success(root.feed)
     }
 }
