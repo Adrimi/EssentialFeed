@@ -43,33 +43,3 @@ public final class RemoteFeedLoader {
         }
     }
 }
-
-private class FeedItemsMapper {
-    private struct Root: Decodable {
-        let items: [Item]
-    }
-
-    // API representation of model. Thus "FeedItem" does not have information of the API implementation and it separate concern of difference in API model and in-app model!
-    private struct Item: Decodable {
-        let id: UUID
-        let description: String?
-        let location: String?
-        let image: URL
-        
-        var feedItem: FeedItem {
-            FeedItem(id: id, description: description, location: location, imageURL: image)
-        }
-    }
-    
-    static private var ACK_200: Int { 200 }
-    
-    static func map(_ data: Data, _ response: HTTPURLResponse) throws -> [FeedItem] {
-        guard response.statusCode == ACK_200 else {
-            throw RemoteFeedLoader.Error.invalidData
-        }
-        return try JSONDecoder()
-            .decode(Root.self, from: data)
-            .items
-            .map(\.feedItem)
-    }
-}
