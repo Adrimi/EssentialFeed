@@ -79,7 +79,7 @@ class RemoteFeedLoaderTests: XCTestCase {
         
         let item1 = makeItem(id: UUID(), description: nil, location: nil, imageURL: URL(string: "http://a-url.com")!)
 
-        let item2 = makeItem(id: UUID(), description: "a description", location: "a location", imageURL: URL(string: "http://another-url.com/")!)
+        let item2 = makeItem(id: UUID(), description: "a description", location: "a location", imageURL: URL(string: "http://another-url.com/")!) 
 
         let items = [item1.model, item2.model]
         
