@@ -74,7 +74,6 @@ class RemoteFeedLoaderTests: XCTestCase {
         client.complete(withStatusCode: 200, data: emptyJSON)
         
         XCTAssertEqual(capturedResults, [.success([])])
-        
     }
     
     // MARK: - Helpers
