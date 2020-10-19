@@ -1,0 +1,15 @@
+name: EssentialFeed
+options:
+  bundleIdPrefix: io.adrimi
+  deploymentTarget:
+    macOS: 10.15
+
+targets:
+  EssentialFeed:
+    type: framework
+    platform: macOS
+    deploymentTarget: 10.15
+    sources: EssentialFeed
+    settings:
+      base:
+        SWIFT_VERSION: "5"
