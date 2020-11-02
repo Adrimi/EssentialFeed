@@ -32,15 +32,15 @@ public final class LocalFeedLoader {
     }
     
     public func load(completion: @escaping (LoadResult) -> Void)  {
-        store.retreieve { result in
+        store.retreieve { [unowned self] result in
             switch result {
             case let .failure(error):
                 completion(.failure(error))
              
-            case let .found(feed, _):
+            case let .found(feed, timestamp) where self.validate(timestamp):
                 completion(.success(feed.toModels()))
                 
-            case .empty:
+            case .empty, .found:
                 completion(.success([]))
             }
         }
@@ -51,6 +51,19 @@ public final class LocalFeedLoader {
             guard self != nil else { return }
             completion(error)
         }
+    }
+    
+    private func validate(_ timestamp: Date) -> Bool {
+        Calendar(identifier: .gregorian)
+            .date(byAdding: .day, value: 7, to: timestamp)?
+            .compare(currentDate())
+            .equal(.orderedDescending) ?? false
+    }
+}
+
+private extension ComparisonResult {
+    func equal(_ result: ComparisonResult) -> Bool {
+        self == result
     }
 }
 
