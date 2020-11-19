@@ -48,7 +48,7 @@ class FeedStoreSpy: FeedStore {
         insertionCompeltions[index](error)
     }
     
-    func retreieve(completion: @escaping RetrievalCompletion) {
+    func retrieve(completion: @escaping RetrievalCompletion) {
         retrievalCompeltions.append(completion)
         receivedMessages.append(.retrieve)
     }
