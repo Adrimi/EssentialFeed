@@ -131,12 +131,12 @@ class CodableFeedStoreTests: XCTestCase {
             sut.retrieve { firstResult in
                 sut.retrieve { secondResult in
                     switch (firstResult, secondResult) {
-                    case let (.found(firstFound), .found(secondFound)):
-                        XCTAssertEqual(firstFound.feed, expectedFeed)
-                        XCTAssertEqual(firstFound.timestamp, expectedTimestamp)
+                    case let (.found(firstFoundFeed, firstFoundTimestamp), .found(secondFoundFeed, secondFoundTimestamp)):
+                        XCTAssertEqual(firstFoundFeed, expectedFeed)
+                        XCTAssertEqual(firstFoundTimestamp, expectedTimestamp)
                         
-                        XCTAssertEqual(secondFound.feed, expectedFeed)
-                        XCTAssertEqual(secondFound.timestamp, expectedTimestamp)
+                        XCTAssertEqual(secondFoundFeed, expectedFeed)
+                        XCTAssertEqual(secondFoundTimestamp, expectedTimestamp)
                         
                     default:
                         XCTFail("Expected retrieving twice from non empty cache to deliver same found result with feed \(expectedFeed) and timestamp \(expectedTimestamp), got \(firstResult) and \(secondResult) instead")
@@ -165,9 +165,9 @@ class CodableFeedStoreTests: XCTestCase {
             case (.empty, .empty):
                 break
                 
-            case let (.found(expected), .found(retrieved)):
-                XCTAssertEqual(retrieved.feed, expected.feed, file: file, line: line)
-                XCTAssertEqual(retrieved.timestamp, expected.timestamp, file: file, line: line)
+            case let (.found(expectedFeed, expectedTimestamp), .found(retrievedFeed, retrievedTimestamp)):
+                XCTAssertEqual(retrievedFeed, expectedFeed, file: file, line: line)
+                XCTAssertEqual(retrievedTimestamp, expectedTimestamp, file: file, line: line)
                 
             default:
                 XCTFail("Expected to retrieve \(expectedResult), got \(retrievedResult) instead", file: file, line: line)
