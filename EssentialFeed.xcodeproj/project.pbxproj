@@ -49,12 +49,12 @@
 		958898B0258BE33A003742F5 /* EssentialFeediOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 958898A7258BE33A003742F5 /* EssentialFeediOS.framework */; };
 		95C06FF22537BBAF0095D750 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C06FF12537BBAF0095D750 /* XCTestCase+MemoryLeakTracking.swift */; };
 		95EDCC6E25A35E8500B1A5E3 /* FeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95EDCC6D25A35E8500B1A5E3 /* FeedViewControllerTests.swift */; };
-		95EDCC7C25A3645E00B1A5E3 /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9528519625322B7800843B47 /* EssentialFeed.framework */; platformFilter = ios; };
 		95EDCC8C25A365B100B1A5E3 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C06FF12537BBAF0095D750 /* XCTestCase+MemoryLeakTracking.swift */; };
 		F063546725A3A24300CB3617 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F063546625A3A24300CB3617 /* FeedViewController.swift */; };
 		F063546E25A3A28600CB3617 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F063546625A3A24300CB3617 /* FeedViewController.swift */; };
 		F063C67825A64212009694BF /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CFBDC525A640240088DE41 /* FeedImageCell.swift */; };
 		F0CFBDC625A640240088DE41 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CFBDC525A640240088DE41 /* FeedImageCell.swift */; };
+		F0F39D7F25A76F5A00E14C1E /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9528519625322B7800843B47 /* EssentialFeed.framework */; platformFilter = ios; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,7 +175,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95EDCC7C25A3645E00B1A5E3 /* EssentialFeed.framework in Frameworks */,
+				F0F39D7F25A76F5A00E14C1E /* EssentialFeed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
