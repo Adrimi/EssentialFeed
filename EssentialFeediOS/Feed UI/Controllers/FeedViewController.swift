@@ -8,7 +8,7 @@
 import UIKit
 import EssentialFeed
 
-final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
+public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var refreshController: FeedRefreshViewController?
     private var imageLoader: FeedImageDataLoader?
     private var tableModel = [FeedImage]() {
@@ -16,13 +16,13 @@ final class FeedViewController: UITableViewController, UITableViewDataSourcePref
     }
     private var tasks = [IndexPath: FeedImageDataLoaderTask]()
     
-    convenience init(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) {
+    public convenience init(feedLoader: FeedLoader, imageLoader: FeedImageDataLoader) {
         self.init()
         self.refreshController = FeedRefreshViewController(feedLoader: feedLoader)
         self.imageLoader = imageLoader
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         refreshControl = refreshController?.view
@@ -70,14 +70,14 @@ final class FeedViewController: UITableViewController, UITableViewDataSourcePref
         cancelTask(forRowAt: indexPath)
     }
     
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+    public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
             let cellModel = tableModel[indexPath.row]
             tasks[indexPath] = imageLoader?.loadImageData(from: cellModel.url) { _ in }
         }
     }
     
-    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+    public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach(cancelTask)
     }
     

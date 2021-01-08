@@ -51,12 +51,8 @@
 		95EDCC6E25A35E8500B1A5E3 /* FeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95EDCC6D25A35E8500B1A5E3 /* FeedViewControllerTests.swift */; };
 		95EDCC8C25A365B100B1A5E3 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95C06FF12537BBAF0095D750 /* XCTestCase+MemoryLeakTracking.swift */; };
 		F045D4DB25A836C00038E231 /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F045D4DA25A836C00038E231 /* FeedImageDataLoader.swift */; };
-		F045D51025A8370B0038E231 /* FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F045D4DA25A836C00038E231 /* FeedImageDataLoader.swift */; };
 		F045D51E25A838B20038E231 /* FeedRefreshViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F045D51D25A838B20038E231 /* FeedRefreshViewController.swift */; };
-		F045D51F25A838B20038E231 /* FeedRefreshViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F045D51D25A838B20038E231 /* FeedRefreshViewController.swift */; };
 		F063546725A3A24300CB3617 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F063546625A3A24300CB3617 /* FeedViewController.swift */; };
-		F063546E25A3A28600CB3617 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F063546625A3A24300CB3617 /* FeedViewController.swift */; };
-		F063C67825A64212009694BF /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CFBDC525A640240088DE41 /* FeedImageCell.swift */; };
 		F0CFBDC625A640240088DE41 /* FeedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CFBDC525A640240088DE41 /* FeedImageCell.swift */; };
 		F0F39D7F25A76F5A00E14C1E /* EssentialFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9528519625322B7800843B47 /* EssentialFeed.framework */; platformFilter = ios; };
 		F0F39D9925A7734200E14C1E /* UIView+Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F39D9825A7734200E14C1E /* UIView+Shimmering.swift */; };
@@ -740,11 +736,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F045D51025A8370B0038E231 /* FeedImageDataLoader.swift in Sources */,
 				95EDCC6E25A35E8500B1A5E3 /* FeedViewControllerTests.swift in Sources */,
-				F045D51F25A838B20038E231 /* FeedRefreshViewController.swift in Sources */,
-				F063C67825A64212009694BF /* FeedImageCell.swift in Sources */,
-				F063546E25A3A28600CB3617 /* FeedViewController.swift in Sources */,
 				95EDCC8C25A365B100B1A5E3 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
