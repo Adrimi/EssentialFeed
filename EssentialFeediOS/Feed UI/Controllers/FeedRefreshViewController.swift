@@ -8,7 +8,7 @@
 import UIKit
 import EssentialFeed
 
-public final class FeedRefreshViewController: NSObject {
+final class FeedRefreshViewController: NSObject {
     private(set) lazy var view: UIRefreshControl = {
         let view = UIRefreshControl()
         view.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -17,13 +17,13 @@ public final class FeedRefreshViewController: NSObject {
     
     private let feedLoader: FeedLoader
     
-    public init(feedLoader: FeedLoader) {
+    init(feedLoader: FeedLoader) {
         self.feedLoader = feedLoader
     }
     
-    public var onRefresh: (([FeedImage]) -> Void)?
+    var onRefresh: (([FeedImage]) -> Void)?
     
-    @objc public func refresh() {
+    @objc func refresh() {
         view.beginRefreshing()
         feedLoader.load { [weak self] result in
             if let feed = try? result.get() {
