@@ -86,7 +86,7 @@ class EssentialFeedCacheIntegrationTests: XCTestCase {
             }
             saveExp.fulfill()
         }
-        wait(for: [saveExp], timeout: 1.0)
+        wait(for: [saveExp], timeout: 3.0)
     }
 
     private func testSpecificStoreURL() -> URL {
