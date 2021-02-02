@@ -14,19 +14,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="gMZ-aw-sbp">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="16"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="CeF-NC-4Hp" customClass="ErrorView" customModule="MVP" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1a-4S-hpu">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="34"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="2Z1-JU-P3X" appends="YES" id="lew-YU-Dtz"/>
+                                    </connections>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" red="0.99951404330000004" green="0.41759261489999999" blue="0.4154433012" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <gestureRecognizers/>
+                            <constraints>
+                                <constraint firstItem="G1a-4S-hpu" firstAttribute="top" secondItem="CeF-NC-4Hp" secondAttribute="top" id="AFT-oN-8VO"/>
+                                <constraint firstAttribute="trailing" secondItem="G1a-4S-hpu" secondAttribute="trailing" id="PBr-m3-4eR"/>
+                                <constraint firstItem="G1a-4S-hpu" firstAttribute="leading" secondItem="CeF-NC-4Hp" secondAttribute="leading" id="PjV-Ft-AnZ"/>
+                                <constraint firstAttribute="bottom" secondItem="G1a-4S-hpu" secondAttribute="bottom" id="poX-u1-Lsf"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="label" destination="G1a-4S-hpu" id="1XD-Zv-pUe"/>
+                            </connections>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="juh-Rx-gTd">
-                            <rect key="frame" x="0.0" y="652" width="414" height="16"/>
+                            <rect key="frame" x="0.0" y="670" width="414" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="580" id="6tI-8I-J3z" customClass="FeedImageCell" customModule="EssentialFeediOS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="414" height="580"/>
+                                <rect key="frame" x="0.0" y="62" width="414" height="580"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6tI-8I-J3z" id="x3A-g8-jDJ">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="580"/>
@@ -144,8 +165,16 @@ Location</string>
                             <action selector="refresh" destination="J69-bG-Xbu" eventType="valueChanged" id="du0-ZC-civ"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="errorView" destination="CeF-NC-4Hp" id="vCd-ad-VAJ"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8IE-Xt-xms" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="2Z1-JU-P3X">
+                    <connections>
+                        <action selector="hideMessageAnimated" destination="CeF-NC-4Hp" id="tpH-XY-6SC"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1105.7971014492755" y="-11.383928571428571"/>
         </scene>
