@@ -21,8 +21,8 @@ public protocol FeedErrorView {
 
 public final class FeedPresenter {
     private let feedView: FeedView
-    private let errorView: FeedErrorView
     private let loadingView: FeedLoadingView
+    private let errorView: FeedErrorView
     
     private var feedLoadError: String {
         NSLocalizedString(
@@ -33,10 +33,10 @@ public final class FeedPresenter {
         )
     }
     
-    public init(feedView: FeedView, errorView: FeedErrorView, loadingView: FeedLoadingView) {
+    public init(feedView: FeedView, loadingView: FeedLoadingView, errorView: FeedErrorView) {
         self.feedView = feedView
-        self.errorView = errorView
         self.loadingView = loadingView
+        self.errorView = errorView
     }
     
     public static var title: String {
