@@ -125,7 +125,7 @@
 		3A365F0225C97E5300C2F213 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
 		3A365F0B25C97E8600C2F213 /* LoadSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSpy.swift; sourceTree = "<group>"; };
 		3A365F1925C983E100C2F213 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
-		3A365F3825C9880300C2F213 /* UIRefreshControl+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIRefreshControl+Helpers.swift"; path = "EssentialFeediOS/Feed UI/Views/Helpers/UIRefreshControl+Helpers.swift"; sourceTree = "<group>"; };
+		3A365F3825C9880300C2F213 /* UIRefreshControl+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+Helpers.swift"; sourceTree = "<group>"; };
 		3AAFA83D25CA9E27003FF555 /* FeedPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenterTests.swift; sourceTree = "<group>"; };
 		3AAFA86C25CAF6AC003FF555 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		3AAFA88125CAF7C6003FF555 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
@@ -264,6 +264,7 @@
 		3A365F2925C9875F00C2F213 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				3A365F3825C9880300C2F213 /* UIRefreshControl+Helpers.swift */,
 				F0F39D9825A7734200E14C1E /* UIView+Shimmering.swift */,
 				F060057425B36D35005E4A30 /* UITableView+Dequeueing.swift */,
 				F060057C25B36DD3005E4A30 /* UIImageView+Animated.swift */,
@@ -333,7 +334,6 @@
 		9528518C25322B7700843B47 = {
 			isa = PBXGroup;
 			children = (
-				3A365F3825C9880300C2F213 /* UIRefreshControl+Helpers.swift */,
 				9528519825322B7800843B47 /* EssentialFeed */,
 				952851A325322B7800843B47 /* EssentialFeedTests */,
 				951AAE442540930400A3121F /* EssentialFeedAPIEndToEndTests */,
