@@ -7,7 +7,6 @@
 
 import XCTest
 import EssentialFeed
-import EssentialFeediOS
 
 final class FeedLocalizationTests: XCTestCase {
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
