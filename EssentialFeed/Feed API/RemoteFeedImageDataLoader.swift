@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class RemoteFeedImageDataLoader {
+public class RemoteFeedImageDataLoader: FeedImageDataLoader {
     public typealias Result = (FeedImageDataLoader.Result) -> Void
     
     private let client: HTTPClient
