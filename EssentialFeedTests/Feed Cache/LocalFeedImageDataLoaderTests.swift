@@ -5,12 +5,6 @@
 import XCTest
 import EssentialFeed
 
-protocol FeedImageDataStore {
-    typealias Result = Swift.Result<Data?, Error>
-    
-    func retrieve(dataForURL url: URL, completion: @escaping (Result) -> Void)
-}
-
 class LocalFeedImageDataLoader {
     private final class Task: FeedImageDataLoaderTask {
         private var completion: ((FeedImageDataLoader.Result) -> Void)?
