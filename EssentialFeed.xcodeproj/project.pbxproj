@@ -131,6 +131,7 @@
 
 /* Begin PBXFileReference section */
 		3A19A8F025CD54F600C8955C /* FeedImagePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImagePresenterTests.swift; sourceTree = "<group>"; };
+		3A311EB625DA750F00A3CAC0 /* FeedStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore.xcdatamodel; sourceTree = "<group>"; };
 		3A365EDC25C97D8A00C2F213 /* FeedViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedViewController+TestHelpers.swift"; sourceTree = "<group>"; };
 		3A365EEA25C97DD500C2F213 /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		3A365EF225C97E1500C2F213 /* FeedImageCell+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedImageCell+TestHelpers.swift"; sourceTree = "<group>"; };
@@ -359,6 +360,7 @@
 			children = (
 				9504DEB325851C87003D0C43 /* CoreDataFeedStore.swift */,
 				9504DEB925852634003D0C43 /* FeedStore.xcdatamodeld */,
+				3A311EB525DA750F00A3CAC0 /* FeedStore2.xcdatamodeld */,
 				9508E08B258758650085E2A8 /* CoreDataHelpers.swift */,
 				9508E091258758A30085E2A8 /* ManagedCache.swift */,
 				9508E097258758AC0085E2A8 /* ManagedFeedImage.swift */,
@@ -1483,6 +1485,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
+		3A311EB525DA750F00A3CAC0 /* FeedStore2.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3A311EB625DA750F00A3CAC0 /* FeedStore.xcdatamodel */,
+			);
+			currentVersion = 3A311EB625DA750F00A3CAC0 /* FeedStore.xcdatamodel */;
+			name = FeedStore2.xcdatamodeld;
+			path = ../../FeedStore2.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
 		9504DEB925852634003D0C43 /* FeedStore.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
