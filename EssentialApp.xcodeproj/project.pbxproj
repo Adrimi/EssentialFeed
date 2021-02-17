@@ -18,6 +18,7 @@
 		3ACC487025DAF26500405D1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3ACC486F25DAF26500405D1D /* Assets.xcassets */; };
 		3ACC487325DAF26500405D1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ACC487125DAF26500405D1D /* LaunchScreen.storyboard */; };
 		3ADDA69A25DD4E1300B02187 /* FeedLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDA69925DD4E1200B02187 /* FeedLoaderWithFallbackCompositeTests.swift */; };
+		3ADDA69E25DD7ACC00B02187 /* FeedLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDA69D25DD7ACC00B02187 /* FeedLoaderWithFallbackComposite.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		3ACC487225DAF26500405D1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3ACC487425DAF26500405D1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3ADDA69925DD4E1200B02187 /* FeedLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
+		3ADDA69D25DD7ACC00B02187 /* FeedLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				3ACC486F25DAF26500405D1D /* Assets.xcassets */,
 				3ACC487125DAF26500405D1D /* LaunchScreen.storyboard */,
 				3ACC487425DAF26500405D1D /* Info.plist */,
+				3ADDA69D25DD7ACC00B02187 /* FeedLoaderWithFallbackComposite.swift */,
 			);
 			path = EssentialApp;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 			files = (
 				3ACC486B25DAF26500405D1D /* ViewController.swift in Sources */,
 				3ACC486725DAF26500405D1D /* AppDelegate.swift in Sources */,
+				3ADDA69E25DD7ACC00B02187 /* FeedLoaderWithFallbackComposite.swift in Sources */,
 				3ACC486925DAF26500405D1D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
