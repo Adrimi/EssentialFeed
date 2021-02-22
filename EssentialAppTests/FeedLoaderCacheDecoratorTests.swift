@@ -36,7 +36,7 @@ class FeedLoaderCacheDecoratorTests: XCTestCase {
     // MARK: - Helpers
 
     private func makeSUT(with expectedResult: FeedLoader.Result, file: StaticString = #file, line: UInt = #line) -> FeedLoaderCacheDecorator {
-        let loader = LoaderStub(result: expectedResult)
+        let loader = FeedLoaderStub(result: expectedResult)
         let sut = FeedLoaderCacheDecorator(decoratee: loader)
         return sut
     }
@@ -65,17 +65,4 @@ class FeedLoaderCacheDecoratorTests: XCTestCase {
     private func uniqueFeed() -> [FeedImage] {
         [FeedImage(id: UUID(), description: "any", location: "any", url: anyURL())]
     }
-    
-    private class LoaderStub: FeedLoader {
-        private let result: FeedLoader.Result
-        
-        init(result: FeedLoader.Result) {
-            self.result = result
-        }
-        
-        func load(completion: @escaping (FeedLoader.Result) -> Void) {
-            completion(result)
-        }
-    }
-
 }
