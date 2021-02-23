@@ -15,6 +15,10 @@ class DebuggingSceneDelegate: SceneDelegate {
             try? FileManager.default.removeItem(at: localStoreURL)
         }
         
+        if CommandLine.arguments.contains("-disable_animations") {
+            UIView.setAnimationsEnabled(false)
+        }
+        
         super.scene(scene, willConnectTo: session, options: connectionOptions)
     }
     
