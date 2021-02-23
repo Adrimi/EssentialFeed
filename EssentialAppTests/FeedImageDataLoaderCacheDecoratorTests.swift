@@ -6,19 +6,14 @@ import XCTest
 import EssentialFeed
 
 class FeedImageDataLoaderCacheDecorator {
-    private let loader: FeedImageDataLoader
+    private let decoratee: FeedImageDataLoader
     
-    init(loader: FeedImageDataLoader) {
-        self.loader = loader
-    }
-    
-    struct Task: FeedImageDataLoaderTask {
-        func cancel() { }
+    init(decoratee: FeedImageDataLoader) {
+        self.decoratee = decoratee
     }
     
     func loadImageData(from url: URL, completion: @escaping (FeedImageDataLoader.Result) -> Void) -> FeedImageDataLoaderTask {
-        _ = loader.loadImageData(from: url) {_ in}
-        return Task()
+        decoratee.loadImageData(from: url) { _ in }
     }
 }
 
@@ -43,7 +38,7 @@ class FeedImageDataLoaderCacheDecoratorTests: XCTestCase {
 
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: FeedImageDataLoaderCacheDecorator, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedImageDataLoaderCacheDecorator(loader: loader)
+        let sut = FeedImageDataLoaderCacheDecorator(decoratee: loader)
         return (sut, loader)
     }
     
