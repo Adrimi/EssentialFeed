@@ -6,7 +6,7 @@ import XCTest
 import EssentialFeed
 import EssentialApp
 
-class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
+final class FeedLoaderCacheDecoratorTests: XCTestCase, FeedLoaderTestCase {
 
     func test_load_deliversFeedOnLoaderSuccess() {
         let expectedResult = FeedLoader.Result.success(uniqueFeed())
