@@ -18,8 +18,8 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1a-4S-hpu">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="34"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G1a-4S-hpu">
+                                    <rect key="frame" x="8" y="8" width="398" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <nil key="highlightedColor"/>
@@ -31,10 +31,10 @@
                             <color key="backgroundColor" red="0.99951404330000004" green="0.41759261489999999" blue="0.4154433012" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <gestureRecognizers/>
                             <constraints>
-                                <constraint firstItem="G1a-4S-hpu" firstAttribute="top" secondItem="CeF-NC-4Hp" secondAttribute="top" id="AFT-oN-8VO"/>
-                                <constraint firstAttribute="trailing" secondItem="G1a-4S-hpu" secondAttribute="trailing" id="PBr-m3-4eR"/>
-                                <constraint firstItem="G1a-4S-hpu" firstAttribute="leading" secondItem="CeF-NC-4Hp" secondAttribute="leading" id="PjV-Ft-AnZ"/>
-                                <constraint firstAttribute="bottom" secondItem="G1a-4S-hpu" secondAttribute="bottom" id="poX-u1-Lsf"/>
+                                <constraint firstItem="G1a-4S-hpu" firstAttribute="top" secondItem="CeF-NC-4Hp" secondAttribute="top" constant="8" id="AFT-oN-8VO"/>
+                                <constraint firstAttribute="trailing" secondItem="G1a-4S-hpu" secondAttribute="trailing" constant="8" id="PBr-m3-4eR"/>
+                                <constraint firstItem="G1a-4S-hpu" firstAttribute="leading" secondItem="CeF-NC-4Hp" secondAttribute="leading" constant="8" id="PjV-Ft-AnZ"/>
+                                <constraint firstAttribute="bottom" secondItem="G1a-4S-hpu" secondAttribute="bottom" constant="8" id="poX-u1-Lsf"/>
                             </constraints>
                             <connections>
                                 <outlet property="label" destination="G1a-4S-hpu" id="1XD-Zv-pUe"/>
