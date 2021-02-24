@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A104D4625E6596C00BD94FD /* FeedSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A104D4525E6596C00BD94FD /* FeedSnapshotTests.swift */; };
 		3A19A8F125CD54F600C8955C /* FeedImagePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19A8F025CD54F600C8955C /* FeedImagePresenterTests.swift */; };
 		3A311EBE25DA77FA00A3CAC0 /* CoreDataFeedStore+FeedImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A311EBD25DA77FA00A3CAC0 /* CoreDataFeedStore+FeedImageDataLoader.swift */; };
 		3A311ED125DA7F1800A3CAC0 /* FeedStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3A311EB525DA750F00A3CAC0 /* FeedStore.xcdatamodeld */; };
@@ -120,6 +121,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A104D4525E6596C00BD94FD /* FeedSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSnapshotTests.swift; sourceTree = "<group>"; };
 		3A19A8F025CD54F600C8955C /* FeedImagePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedImagePresenterTests.swift; sourceTree = "<group>"; };
 		3A311EB625DA750F00A3CAC0 /* FeedStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FeedStore.xcdatamodel; sourceTree = "<group>"; };
 		3A311EBD25DA77FA00A3CAC0 /* CoreDataFeedStore+FeedImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataFeedStore+FeedImageDataLoader.swift"; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 			isa = PBXGroup;
 			children = (
 				958898B6258BE33A003742F5 /* Info.plist */,
+				3A104D4525E6596C00BD94FD /* FeedSnapshotTests.swift */,
 			);
 			path = EssentialFeediOSTests;
 			sourceTree = "<group>";
@@ -896,6 +899,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				95EDCC8C25A365B100B1A5E3 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
+				3A104D4625E6596C00BD94FD /* FeedSnapshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
