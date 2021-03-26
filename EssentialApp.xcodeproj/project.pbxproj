@@ -28,6 +28,7 @@
 		3A73763625E5A0B50050388A /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A73763525E5A0B50050388A /* FeedUIIntegrationTests.swift */; };
 		3A73766E25E5A23C0050388A /* LoadSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A73765125E5A20C0050388A /* LoadSpy.swift */; };
 		3A73767A25E5A69A0050388A /* FeedAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A73767925E5A69A0050388A /* FeedAcceptanceTests.swift */; };
+		3A768898260E413700DDE777 /* CombineHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A768897260E413700DDE777 /* CombineHelpers.swift */; };
 		3A9DFA3325E674260017F5E8 /* UIView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9DFA3225E674260017F5E8 /* UIView+TestHelpers.swift */; };
 		3ACC486725DAF26500405D1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACC486625DAF26500405D1D /* AppDelegate.swift */; };
 		3ACC486925DAF26500405D1D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACC486825DAF26500405D1D /* SceneDelegate.swift */; };
@@ -88,6 +89,7 @@
 		3A73763525E5A0B50050388A /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
 		3A73765125E5A20C0050388A /* LoadSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSpy.swift; sourceTree = "<group>"; };
 		3A73767925E5A69A0050388A /* FeedAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedAcceptanceTests.swift; sourceTree = "<group>"; };
+		3A768897260E413700DDE777 /* CombineHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineHelpers.swift; sourceTree = "<group>"; };
 		3A9DFA3225E674260017F5E8 /* UIView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+TestHelpers.swift"; sourceTree = "<group>"; };
 		3ACC486325DAF26500405D1D /* EssentialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ACC486625DAF26500405D1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			children = (
 				3ACC486625DAF26500405D1D /* AppDelegate.swift */,
 				3ACC486825DAF26500405D1D /* SceneDelegate.swift */,
+				3A768897260E413700DDE777 /* CombineHelpers.swift */,
 				3A73760125E59A5A0050388A /* FeedUIComposer.swift */,
 				3A73760225E59A5A0050388A /* FeedViewAdapter.swift */,
 				3A7375FF25E59A5A0050388A /* FeedLoaderPresentationAdapter.swift */,
@@ -338,6 +341,7 @@
 			files = (
 				3A73760A25E59A5A0050388A /* FeedViewAdapter.swift in Sources */,
 				3A73760725E59A5A0050388A /* WeakRefVirtualProxy.swift in Sources */,
+				3A768898260E413700DDE777 /* CombineHelpers.swift in Sources */,
 				3ACC486B25DAF26500405D1D /* ViewController.swift in Sources */,
 				3A73760625E59A5A0050388A /* FeedImageDataLoaderPresentationAdapter.swift in Sources */,
 				3ACC486725DAF26500405D1D /* AppDelegate.swift in Sources */,
