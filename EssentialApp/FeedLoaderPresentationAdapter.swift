@@ -25,6 +25,7 @@ final class FeedLoaderPresentationAdapter: FeedViewControllerDelegate {
             receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished: break
+                    
                 case let .failure(error):
                     self?.presenter?.didFinishLoadingFeed(with: error)
                 }
