@@ -340,6 +340,23 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		3A97A815261124EC0000D8F5 /* Image Comments API */ = {
+			isa = PBXGroup;
+			children = (
+				3A97A7DD2610F3C30000D8F5 /* RemoteImageCommentsLoader.swift */,
+				3A97A7F22610F4CC0000D8F5 /* ImageCommentsMapper.swift */,
+			);
+			path = "Image Comments API";
+			sourceTree = "<group>";
+		};
+		3A97A8162611250A0000D8F5 /* Image Comments API */ = {
+			isa = PBXGroup;
+			children = (
+				3A97A7C12610F2350000D8F5 /* LoadImageCommentsFromRemoteUseCaseTests.swift */,
+			);
+			path = "Image Comments API";
+			sourceTree = "<group>";
+		};
 		3AAFA83C25CA9E0A003FF555 /* Feed Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -453,6 +470,7 @@
 				3A97A80B2611243A0000D8F5 /* Shared API Infra */,
 				3A97A80A261124200000D8F5 /* Shared API */,
 				3A97A7FA2610FC2E0000D8F5 /* Image Comments Feature */,
+				3A97A815261124EC0000D8F5 /* Image Comments API */,
 				952851BC25322CD100843B47 /* Feed Feature */,
 				3AAFA86B25CAF69E003FF555 /* Feed Presentation */,
 				9552E433254F597100D0AA0F /* Feed Cache */,
@@ -465,6 +483,7 @@
 		952851A325322B7800843B47 /* EssentialFeedTests */ = {
 			isa = PBXGroup;
 			children = (
+				3A97A8162611250A0000D8F5 /* Image Comments API */,
 				3A97A80D2611244D0000D8F5 /* Shared API Infra */,
 				3A97A80C261124480000D8F5 /* Shared API */,
 				958828622533889600C17825 /* Feed API */,
@@ -491,8 +510,6 @@
 		952851C32532420D00843B47 /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
-				3A97A7DD2610F3C30000D8F5 /* RemoteImageCommentsLoader.swift */,
-				3A97A7F22610F4CC0000D8F5 /* ImageCommentsMapper.swift */,
 				3AD4017225D56F93003FDEB9 /* Helpers */,
 				952851C42532421700843B47 /* RemoteFeedLoader.swift */,
 				9588285E2533830B00C17825 /* FeedItemsMapper.swift */,
@@ -557,7 +574,6 @@
 		958828622533889600C17825 /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
-				3A97A7C12610F2350000D8F5 /* LoadImageCommentsFromRemoteUseCaseTests.swift */,
 				952851BF2532311000843B47 /* LoadFeedFromRemoteUseCaseTests.swift */,
 				3AE7484525D2F4EF0018B463 /* LoadFeedImageDataFromRemoteUseCaseTests.swift */,
 			);
