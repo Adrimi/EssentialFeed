@@ -10,13 +10,29 @@ import Combine
 import EssentialFeed
 import EssentialFeediOS
 
-public extension FeedLoader {
+public extension LocalFeedLoader {
     typealias Publisher = AnyPublisher<[FeedImage], Swift.Error>
     
     func loadPublisher() -> Publisher {
         return Deferred {
             Future(self.load)
         }.eraseToAnyPublisher()
+    }
+}
+
+public extension HTTPClient {
+    typealias Publisher = AnyPublisher<(Data, HTTPURLResponse), Error>
+    
+    func getPublisher(url: URL) -> Publisher {
+        var task: HTTPClientTask?
+        
+        return Deferred {
+            Future { completion in
+                task = self.get(from: url, completion: completion)
+            }
+        }
+        .handleEvents(receiveCancel: { task?.cancel() })
+        .eraseToAnyPublisher()
     }
 }
 
