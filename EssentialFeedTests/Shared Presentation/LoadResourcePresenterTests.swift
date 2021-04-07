@@ -38,7 +38,7 @@ class LoadResourcePresenterTests: XCTestCase {
     }
     
     func test_didFinishLoadingWithMapperError_displaysLocalizedErrorMessageAndStopsLoading() {
-        let (sut, view) = makeSUT(mapper: { resource in
+        let (sut, view) = makeSUT(mapper: { _ in
              throw anyNSError()
         })
         
