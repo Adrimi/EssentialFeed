@@ -9,7 +9,7 @@ import UIKit
 import EssentialFeed
 
 public protocol FeedViewControllerDelegate {
-    func didRequestFeedRefresh()
+    func loadResource()
 }
 
 public final class FeedViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
@@ -34,7 +34,7 @@ public final class FeedViewController: UITableViewController, UITableViewDataSou
     }
     
     @IBAction private func refresh() {
-        delegate?.didRequestFeedRefresh()
+        delegate?.loadResource()
     }
     
     public func display(_ cellControllers: [FeedImageCellController]) {
