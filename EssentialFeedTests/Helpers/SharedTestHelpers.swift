@@ -19,3 +19,24 @@ func anyData() -> Data {
     Data("any data".utf8)
 }
 
+extension Date {
+    func adding(seconds: TimeInterval) -> Date {
+        self + seconds
+    }
+    
+    func adding(days: Int) -> Date {
+        Calendar(identifier: .gregorian)
+            .date(
+                byAdding: .day,
+                value: days,
+                to: self)!
+    }
+    
+    func adding(minutes: Int) -> Date {
+        Calendar(identifier: .gregorian)
+            .date(
+                byAdding: .minute,
+                value: minutes,
+                to: self)!
+    }
+}
