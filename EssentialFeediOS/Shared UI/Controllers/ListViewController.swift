@@ -8,12 +8,6 @@
 import UIKit
 import EssentialFeed
 
-public protocol CellController {
-    func view(in: UITableView) -> UITableViewCell
-    func preload()
-    func cancelLoad()
-}
-
 public final class ListViewController: UITableViewController, UITableViewDataSourcePrefetching, ResourceLoadingView, ResourceErrorView {
     public var onRefresh: (() -> Void)?
     @IBOutlet private(set) public var errorView: ErrorView?
