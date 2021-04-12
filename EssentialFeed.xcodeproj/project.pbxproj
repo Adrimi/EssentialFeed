@@ -49,7 +49,6 @@
 		3AD77757261C60500009C1CD /* SharedLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD77756261C60500009C1CD /* SharedLocalizationTests.swift */; };
 		3AD7775E261C610E0009C1CD /* Shared.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3AD7774B261C5EDD0009C1CD /* Shared.strings */; };
 		3AD7776D261C97720009C1CD /* SharedLocalizationTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD7776C261C97720009C1CD /* SharedLocalizationTestHelpers.swift */; };
-		3AE1E0B3261F334D0040A519 /* CellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE1E0B2261F334D0040A519 /* CellController.swift */; };
 		3AE1E0D1261F34890040A519 /* ListSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE1E0D0261F34890040A519 /* ListSnapshotTests.swift */; };
 		3AE1E0DF261F35060040A519 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE1E0DE261F35060040A519 /* Snapshot.swift */; };
 		3AE1E0E7261F353E0040A519 /* Feed+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE1E0E6261F353E0040A519 /* Feed+Helpers.swift */; };
@@ -201,7 +200,6 @@
 		3AD7774F261C5EDD0009C1CD /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Shared.strings; sourceTree = "<group>"; };
 		3AD77756261C60500009C1CD /* SharedLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLocalizationTests.swift; sourceTree = "<group>"; };
 		3AD7776C261C97720009C1CD /* SharedLocalizationTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLocalizationTestHelpers.swift; sourceTree = "<group>"; };
-		3AE1E0B2261F334D0040A519 /* CellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellController.swift; sourceTree = "<group>"; };
 		3AE1E0D0261F34890040A519 /* ListSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSnapshotTests.swift; sourceTree = "<group>"; };
 		3AE1E0DE261F35060040A519 /* Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snapshot.swift; sourceTree = "<group>"; };
 		3AE1E0E6261F353E0040A519 /* Feed+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed+Helpers.swift"; sourceTree = "<group>"; };
@@ -511,7 +509,6 @@
 			isa = PBXGroup;
 			children = (
 				F063546625A3A24300CB3617 /* ListViewController.swift */,
-				3AE1E0B2261F334D0040A519 /* CellController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1231,7 +1228,6 @@
 				F060057525B36D35005E4A30 /* UITableView+Dequeueing.swift in Sources */,
 				F0CFBDC625A640240088DE41 /* FeedImageCell.swift in Sources */,
 				F0517AE525A8D1CC00D60A0C /* FeedImageCellController.swift in Sources */,
-				3AE1E0B3261F334D0040A519 /* CellController.swift in Sources */,
 				3AE1E17E261F3D650040A519 /* ImageCommentCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
