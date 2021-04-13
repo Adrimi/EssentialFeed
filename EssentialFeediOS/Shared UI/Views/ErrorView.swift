@@ -25,6 +25,21 @@ public final class ErrorView: UIButton {
         super.init(coder: coder)
     }
     
+    public override var intrinsicContentSize: CGSize {
+      guard message != nil, let label = titleLabel else { return .zero }
+      
+      var size = label.intrinsicContentSize
+      size.width += contentEdgeInsets.left + contentEdgeInsets.right
+      size.height += contentEdgeInsets.top + contentEdgeInsets.bottom
+      return size
+    }
+
+    public override func layoutSubviews() {
+      super.layoutSubviews()
+      titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.width ?? 0
+      super.layoutSubviews()
+    }
+    
     private func configure() {
         backgroundColor = .errorBackgroundColor
         
@@ -37,7 +52,8 @@ public final class ErrorView: UIButton {
         titleLabel?.textColor = .white
         titleLabel?.textAlignment = .center
         titleLabel?.numberOfLines = 0
-        titleLabel?.font = .systemFont(ofSize: 17)
+        titleLabel?.font = .preferredFont(forTextStyle: .body)
+        titleLabel?.adjustsFontForContentSizeCategory = true;
     }
     
     private var isVisible: Bool {
