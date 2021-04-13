@@ -16,12 +16,15 @@ extension UIView {
                 stopShimmering()
             }
         }
+        
         get {
-            layer.mask?.animation(forKey: shimmerAnimationKey) != nil
+            return layer.mask?.animation(forKey: shimmerAnimationKey) != nil
         }
     }
     
-    private var shimmerAnimationKey: String { "shimmer" }
+    private var shimmerAnimationKey: String {
+        return "shimmer"
+    }
     
     private func startShimmering() {
         let white = UIColor.white.cgColor
