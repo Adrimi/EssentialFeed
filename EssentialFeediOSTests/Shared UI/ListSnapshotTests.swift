@@ -29,14 +29,12 @@ class ListSnapshotTests: XCTestCase {
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "LIST_WITH_ERROR_MESSAGE_dark")
     }
 
-    
     // MARK: - Helpers
     
     private func makeSUT() -> ListViewController {
-        let bundle = Bundle(for: ListViewController.self)
-        let storyboard = UIStoryboard(name: "Feed", bundle: bundle)
-        let controller = storyboard.instantiateInitialViewController() as! ListViewController
+        let controller = ListViewController()
         controller.loadViewIfNeeded()
+        controller.tableView.separatorStyle = .none
         controller.tableView.showsVerticalScrollIndicator = false
         controller.tableView.showsHorizontalScrollIndicator = false
         return controller
