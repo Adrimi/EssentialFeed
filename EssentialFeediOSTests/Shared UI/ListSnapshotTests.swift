@@ -20,10 +20,10 @@ class ListSnapshotTests: XCTestCase {
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "EMPTY_LIST_dark")
     }
     
-    func test_feedWithErrorMessage() {
+    func test_listWithErrorMessage() {
         let sut = makeSUT()
         
-        sut.display(.error(message: "This is a long long long long long long long error message!"))
+        sut.display(.error(message: "This is a long long long\n long long long long error message!"))
         
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .light)), named: "LIST_WITH_ERROR_MESSAGE_light")
         assert(snapshot: sut.snapshot(for: .iPhone8(style: .dark)), named: "LIST_WITH_ERROR_MESSAGE_dark")

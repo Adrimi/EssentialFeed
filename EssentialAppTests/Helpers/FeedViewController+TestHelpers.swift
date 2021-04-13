@@ -42,9 +42,13 @@ extension ListViewController {
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
         return view
     }
+
+    func simulateErrorViewTap() {
+        errorView.simulateTap()
+    }
     
     var errorMessage: String? {
-        errorView?.message
+        errorView.message
     }
     
     var isShowingLoadingIndicator: Bool {
