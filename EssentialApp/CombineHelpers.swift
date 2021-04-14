@@ -8,17 +8,6 @@
 import Foundation
 import Combine
 import EssentialFeed
-import EssentialFeediOS
-
-public extension LocalFeedLoader {
-    typealias Publisher = AnyPublisher<[FeedImage], Swift.Error>
-    
-    func loadPublisher() -> Publisher {
-        return Deferred {
-            Future(self.load)
-        }.eraseToAnyPublisher()
-    }
-}
 
 public extension HTTPClient {
     typealias Publisher = AnyPublisher<(Data, HTTPURLResponse), Error>
@@ -52,23 +41,11 @@ public extension FeedImageDataLoader {
     }
 }
 
-extension Publisher where Output == [FeedImage] {
-    func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> {
-        handleEvents(receiveOutput: cache.saveIgnoringResult).eraseToAnyPublisher()
-    }
-}
-
 extension Publisher where Output == Data {
     func caching(to cache: FeedImageDataCache, using url: URL) -> AnyPublisher<Output, Failure> {
         handleEvents(receiveOutput: { data in
             cache.saveIgnoringResult(data, for: url)
         }).eraseToAnyPublisher()
-    }
-}
-
-private extension FeedCache {
-    func saveIgnoringResult(_ feed: [FeedImage]) {
-        save(feed) { _ in }
     }
 }
 
@@ -78,26 +55,47 @@ private extension FeedImageDataCache {
     }
 }
 
+public extension LocalFeedLoader {
+    typealias Publisher = AnyPublisher<[FeedImage], Error>
+    
+    func loadPublisher() -> Publisher {
+        Deferred {
+            Future(self.load)
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
 extension Publisher {
     func fallback(to fallbackPublisher: @escaping () -> AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> {
         self.catch { _ in fallbackPublisher() }.eraseToAnyPublisher()
     }
 }
 
+extension Publisher where Output == [FeedImage] {
+    func caching(to cache: FeedCache) -> AnyPublisher<Output, Failure> {
+        handleEvents(receiveOutput: cache.saveIgnoringResult).eraseToAnyPublisher()
+    }
+}
+
+private extension FeedCache {
+    func saveIgnoringResult(_ feed: [FeedImage]) {
+        save(feed) { _ in }
+    }
+}
+
 extension Publisher {
     func dispatchOnMainQueue() -> AnyPublisher<Output, Failure> {
-        receive(on: DispatchQueue.immidiateWhenOnMainQueueScheduler)
-            .eraseToAnyPublisher()
+        receive(on: DispatchQueue.immediateWhenOnMainQueueScheduler).eraseToAnyPublisher()
     }
 }
 
 extension DispatchQueue {
-    
-    static var immidiateWhenOnMainQueueScheduler: ImmidiateWhenOnMainQueueScheduler {
-        ImmidiateWhenOnMainQueueScheduler()
+    static var immediateWhenOnMainQueueScheduler: ImmediateWhenOnMainQueueScheduler {
+        ImmediateWhenOnMainQueueScheduler.shared
     }
     
-    struct ImmidiateWhenOnMainQueueScheduler: Scheduler {
+    struct ImmediateWhenOnMainQueueScheduler: Scheduler {
         typealias SchedulerTimeType = DispatchQueue.SchedulerTimeType
         typealias SchedulerOptions = DispatchQueue.SchedulerOptions
         
@@ -109,11 +107,24 @@ extension DispatchQueue {
             DispatchQueue.main.minimumTolerance
         }
         
+        static let shared = Self()
+        
+        private static let key = DispatchSpecificKey<UInt8>()
+        private static let value = UInt8.max
+        
+        private init() {
+            DispatchQueue.main.setSpecific(key: Self.key, value: Self.value)
+        }
+        
+        private func isMainQueue() -> Bool {
+            DispatchQueue.getSpecific(key: Self.key) == Self.value
+        }
+        
         func schedule(options: SchedulerOptions?, _ action: @escaping () -> Void) {
-            guard Thread.isMainThread else {
-                return  DispatchQueue.main.schedule(options: options, action)
+            guard isMainQueue() else {
+                return DispatchQueue.main.schedule(options: options, action)
             }
-            
+                        
             action()
         }
         

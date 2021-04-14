@@ -5,26 +5,27 @@
 //  Created by Adrian Szymanowski on 16/01/2021.
 //
 
-import Combine
 import UIKit
 import EssentialFeed
 import EssentialFeediOS
 
 final class FeedViewAdapter: ResourceView {
-    private weak var controller: FeedViewController?
+    private weak var controller: ListViewController?
     private let imageLoader: (URL) -> FeedImageDataLoader.Publisher
     
-    init(controller: FeedViewController, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) {
+    private typealias ImageDataPresentationAdapter = LoadResourcePresentationAdapter<Data, WeakRefVirtualProxy<FeedImageCellController>>
+
+    init(controller: ListViewController, imageLoader: @escaping (URL) -> FeedImageDataLoader.Publisher) {
         self.controller = controller
         self.imageLoader = imageLoader
     }
     
     func display(_ viewModel: FeedViewModel) {
         controller?.display(viewModel.feed.map { model in
-            let adapter = LoadResourcePresentationAdapter<Data, WeakRefVirtualProxy<FeedImageCellController>>(loader: { [imageLoader] in
+            let adapter = ImageDataPresentationAdapter(loader: { [imageLoader] in
                 imageLoader(model.url)
             })
-            
+
             let view = FeedImageCellController(
                 viewModel: FeedImagePresenter.map(model),
                 delegate: adapter)
@@ -33,15 +34,20 @@ final class FeedViewAdapter: ResourceView {
                 resourceView: WeakRefVirtualProxy(view),
                 loadingView: WeakRefVirtualProxy(view),
                 errorView: WeakRefVirtualProxy(view),
-                mapper: { data in
-                    guard let image = UIImage.init(data: data) else {
-                        throw InvalidImageData()
-                    }
-                    return image
-                })
-            return view
+                mapper: UIImage.tryMake)
+            
+            return CellController(id: model, view)
         })
     }
 }
 
-private struct InvalidImageData: Error {}
+extension UIImage {
+    struct InvalidImageData: Error {}
+    
+    static func tryMake(data: Data) throws -> UIImage {
+        guard let image = UIImage(data: data) else {
+            throw InvalidImageData()
+        }
+        return image
+    }
+}

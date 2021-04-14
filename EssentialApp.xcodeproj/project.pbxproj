@@ -31,7 +31,6 @@
 		3A9DFA3325E674260017F5E8 /* UIView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9DFA3225E674260017F5E8 /* UIView+TestHelpers.swift */; };
 		3ACC486725DAF26500405D1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACC486625DAF26500405D1D /* AppDelegate.swift */; };
 		3ACC486925DAF26500405D1D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACC486825DAF26500405D1D /* SceneDelegate.swift */; };
-		3ACC486B25DAF26500405D1D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACC486A25DAF26500405D1D /* ViewController.swift */; };
 		3ACC486E25DAF26500405D1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ACC486C25DAF26500405D1D /* Main.storyboard */; };
 		3ACC487025DAF26500405D1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3ACC486F25DAF26500405D1D /* Assets.xcassets */; };
 		3ACC487325DAF26500405D1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ACC487125DAF26500405D1D /* LaunchScreen.storyboard */; };
@@ -90,7 +89,6 @@
 		3ACC486325DAF26500405D1D /* EssentialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EssentialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ACC486625DAF26500405D1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3ACC486825DAF26500405D1D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		3ACC486A25DAF26500405D1D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3ACC486D25DAF26500405D1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3ACC486F25DAF26500405D1D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3ACC487225DAF26500405D1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@
 				3A73760225E59A5A0050388A /* FeedViewAdapter.swift */,
 				3A7375FF25E59A5A0050388A /* LoadResourcePresentationAdapter.swift */,
 				3A73760425E59A5A0050388A /* WeakRefVirtualProxy.swift */,
-				3ACC486A25DAF26500405D1D /* ViewController.swift */,
 				3ACC486C25DAF26500405D1D /* Main.storyboard */,
 				3ACC486F25DAF26500405D1D /* Assets.xcassets */,
 				3ACC487125DAF26500405D1D /* LaunchScreen.storyboard */,
@@ -331,7 +328,6 @@
 				3A73760A25E59A5A0050388A /* FeedViewAdapter.swift in Sources */,
 				3A73760725E59A5A0050388A /* WeakRefVirtualProxy.swift in Sources */,
 				3A768898260E413700DDE777 /* CombineHelpers.swift in Sources */,
-				3ACC486B25DAF26500405D1D /* ViewController.swift in Sources */,
 				3ACC486725DAF26500405D1D /* AppDelegate.swift in Sources */,
 				3A73760525E59A5A0050388A /* LoadResourcePresentationAdapter.swift in Sources */,
 				3A73760925E59A5A0050388A /* FeedUIComposer.swift in Sources */,

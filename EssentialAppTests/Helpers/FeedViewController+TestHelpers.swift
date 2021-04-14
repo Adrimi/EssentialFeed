@@ -1,5 +1,5 @@
 //
-//  FeedViewController+TestHelpers.swift
+//  ListViewController+TestHelpers.swift
 //  EssentialFeediOSTests
 //
 //  Created by Adrian Szymanowski on 02/02/2021.
@@ -9,14 +9,25 @@ import UIKit
 import EssentialFeediOS
 
 
-extension FeedViewController {
+extension ListViewController {
     func simulateUserInitiatedFeedReload() {
         refreshControl?.simulatePullToRefresh()
     }
     
+    public override func loadViewIfNeeded() {
+        super.loadViewIfNeeded()
+        tableView.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+    }
+    
     @discardableResult
     func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
-        feedImageView(at: index) as? FeedImageCell
+        let cell = feedImageView(at: index) as? FeedImageCell
+        if let cell = cell  {
+            let delegate = tableView.delegate
+            let indexPath = IndexPath(row: index, section: feedImagesSection)
+            delegate?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
+        }
+        return cell
     }
     
     func simulateFeedImageViewNearVisible(at row: Int) {
@@ -42,9 +53,13 @@ extension FeedViewController {
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
         return view
     }
+
+    func simulateErrorViewTap() {
+        errorView.simulateTap()
+    }
     
     var errorMessage: String? {
-        errorView?.message
+        errorView.message
     }
     
     var isShowingLoadingIndicator: Bool {
@@ -52,7 +67,7 @@ extension FeedViewController {
     }
     
     func numberOfRenderedFeedImageViews() -> Int {
-        tableView.numberOfRows(inSection: feedImagesSection)
+        tableView.numberOfSections == 0 ? 0 : tableView.numberOfRows(inSection: feedImagesSection)
     }
     
     func renderedFeedImageData(at index: Int) -> Data? {
