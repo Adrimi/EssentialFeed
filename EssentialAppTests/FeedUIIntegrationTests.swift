@@ -331,7 +331,7 @@ class FeedUIIntegrationTests: XCTestCase {
     }
     
     // MARK: - Helper Methods
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ListViewController, laoder: LoaderSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ListViewController, laoder: LoaderSpy) {
         let loader = LoaderSpy()
         let sut = FeedUIComposer.feedComposedWith(feedLoader: loader.loadPublisher, imageLoader: loader.loadImageDataPublisher)
         trackForMemoryLeaks(loader, file: file, line: line)
@@ -339,7 +339,7 @@ class FeedUIIntegrationTests: XCTestCase {
         return (sut, loader)
     }
     
-    private func assertThat(_ sut: ListViewController, isRendering feed: [FeedImage], file: StaticString = #file, line: UInt = #line) {
+    private func assertThat(_ sut: ListViewController, isRendering feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
         sut.view.enforceLayoutCycle()
         guard sut.numberOfRenderedFeedImageViews() == feed.count else {
             return XCTFail("Expected \(feed.count) images, got \(sut.numberOfRenderedFeedImageViews()) instead.", file: file, line: line)
@@ -350,7 +350,7 @@ class FeedUIIntegrationTests: XCTestCase {
         }
     }
     
-    private func assertThat(_ sut: ListViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #file, line: UInt = #line) {
+    private func assertThat(_ sut: ListViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.feedImageView(at: index)
         
         guard let cell = view as? FeedImageCell else {
