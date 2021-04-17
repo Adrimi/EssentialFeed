@@ -10,7 +10,7 @@ import EssentialFeed
 
 private typealias LocalizedBundle = (bundle: Bundle, localization: String)
 
-func assertLocalizedKeysAndValuesExists(in bundle: Bundle, _ table: String, file: StaticString = #file, line: UInt = #line) {
+func assertLocalizedKeysAndValuesExists(in bundle: Bundle, _ table: String, file: StaticString = #filePath, line: UInt = #line) {
     let localizationBundles = allLocalizationBundles(in: bundle, file: file, line: line)
     let localizedStringKeys = allLocalizedStrinKeys(in: localizationBundles, table: table, file: file, line: line)
     
@@ -27,7 +27,7 @@ func assertLocalizedKeysAndValuesExists(in bundle: Bundle, _ table: String, file
     }
 }
 
-private func allLocalizationBundles(in bundle: Bundle, file: StaticString = #file, line: UInt = #line) -> [LocalizedBundle] {
+private func allLocalizationBundles(in bundle: Bundle, file: StaticString = #filePath, line: UInt = #line) -> [LocalizedBundle] {
     bundle.localizations.compactMap { localization in
         guard let path = bundle.path(forResource: localization, ofType: "lproj"),
               let localizedBundle = Bundle(path: path) else {
@@ -39,7 +39,7 @@ private func allLocalizationBundles(in bundle: Bundle, file: StaticString = #fil
     }
 }
 
-private func allLocalizedStrinKeys(in bundles: [LocalizedBundle], table: String, file: StaticString = #file, line: UInt = #line) -> Set<String> {
+private func allLocalizedStrinKeys(in bundles: [LocalizedBundle], table: String, file: StaticString = #filePath, line: UInt = #line) -> Set<String> {
     bundles.reduce([]) { (acc, current) in
         guard let path = current.bundle.path(forResource: table, ofType: "strings"),
               let strings = NSDictionary(contentsOfFile: path),
