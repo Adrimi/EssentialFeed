@@ -107,6 +107,10 @@ extension ListViewController {
         loadMoreFeedCell()?.message
     }
     
+    var canLoadMoreFeed: Bool {
+        loadMoreFeedCell() != nil
+    }
+    
     func simulateTapOnLoadMoreFeedError() {
         let delegate = tableView.delegate
         let index = IndexPath(row: 0, section: feedLoadMoreSection)
@@ -122,7 +126,7 @@ extension ListViewController {
     }
 
     func renderedFeedImageData(at index: Int) -> Data? {
-        simulateFeedImageViewVisible(at: 0)?.renderedImage
+        simulateFeedImageViewVisible(at: index)?.renderedImage
     }
     
     func feedImageView(at row: Int) -> UITableViewCell? {
