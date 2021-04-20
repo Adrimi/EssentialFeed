@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     private lazy var feedURL: URL = {
-        baseURL.appendingPathComponent("/v1/feed")
+        FeedEndpoint.get.url(baseURL: baseURL)
     }()
     
     private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
