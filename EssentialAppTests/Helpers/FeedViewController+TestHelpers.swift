@@ -103,6 +103,10 @@ extension ListViewController {
         loadMoreFeedCell()?.isLoading == true
     }
     
+    var loadMoreFeedErrorMessage: String? {
+        loadMoreFeedCell()?.message
+    }
+    
     func simulateLoadMoreFeedAction() {
         guard let view = loadMoreFeedCell() else { return }
         
