@@ -5,6 +5,7 @@
 //  Created by Adrian Szymanowski on 15/02/2021.
 //
 
+import os
 import UIKit
 import CoreData
 import Combine
@@ -18,6 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         FeedEndpoint.get().url(baseURL: baseURL)
     }()
     
+    private lazy var logger = Logger(subsystem: "com.adrimi.EssentialAppCaseStudy", category: "main")
+    
     private lazy var baseURL = URL(string: "https://ile-api.essentialdeveloper.com/essential-feed")!
     
     private lazy var httpClient: HTTPClient = {
@@ -25,10 +28,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }()
     
     private lazy var store: FeedStore & FeedImageDataStore = {
-        try! CoreDataFeedStore(
-            storeURL: NSPersistentContainer
-                .defaultDirectoryURL()
-                .appendingPathComponent("feed-store.sqlite"))
+        do {
+            return try CoreDataFeedStore(
+                storeURL: NSPersistentContainer
+                    .defaultDirectoryURL()
+                    .appendingPathComponent("feed-store.sqlite"))
+        } catch {
+            logger.fault("CoreData store failed to instantiate with error: \(error.localizedDescription)")
+            return NullStore()
+        }
     }()
     
     private lazy var localFeedLoader = {
@@ -58,6 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func configureWindow() {
         window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
     
     func showComments(for image: FeedImage) {
