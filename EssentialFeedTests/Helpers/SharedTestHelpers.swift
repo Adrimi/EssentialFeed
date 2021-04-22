@@ -19,6 +19,12 @@ func anyData() -> Data {
     Data("any data".utf8)
 }
 
+extension HTTPURLResponse {
+    convenience init(statusCode: Int) {
+        self.init(url: anyURL(), statusCode: statusCode, httpVersion: nil, headerFields: nil)!
+    }
+}
+
 extension Date {
     func adding(seconds: TimeInterval) -> Date {
         self + seconds
