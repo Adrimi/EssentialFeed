@@ -66,6 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func configureWindow() {
         window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
     
     func showComments(for image: FeedImage) {

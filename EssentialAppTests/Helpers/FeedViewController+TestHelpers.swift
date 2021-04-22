@@ -31,12 +31,12 @@ extension ListViewController {
         refreshControl?.isRefreshing == true
     }
     
-    private func numberOfRenderedCells(inSection section: Int) -> Int {
-        (tableView.numberOfSections - 1) < section ? 0 : tableView.numberOfRows(inSection: section)
+    func numberOfRows(in section: Int) -> Int {
+        tableView.numberOfSections > section ? tableView.numberOfRows(inSection: section) : 0
     }
     
     func cell(row: Int, section: Int) -> UITableViewCell? {
-        guard numberOfRenderedCells(inSection: section) > row else {
+        guard numberOfRows(in: section) > row else {
             return nil
         }
         let dataSource = tableView.dataSource
@@ -52,13 +52,7 @@ extension ListViewController {
 
     @discardableResult
     func simulateFeedImageViewVisible(at index: Int) -> FeedImageCell? {
-        let cell = feedImageView(at: index) as? FeedImageCell
-        if let cell = cell  {
-            let delegate = tableView.delegate
-            let indexPath = IndexPath(row: index, section: feedImagesSection)
-            delegate?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
-        }
-        return cell
+        feedImageView(at: index) as? FeedImageCell
     }
     
     func simulateFeedImageViewNearVisible(at row: Int) {
@@ -92,7 +86,7 @@ extension ListViewController {
     }
     
     func numberOfRenderedFeedImageViews() -> Int {
-        tableView.numberOfSections == 0 ? 0 : tableView.numberOfRows(inSection: feedImagesSection)
+        numberOfRows(in: feedImagesSection)
     }
     
     private func loadMoreFeedCell() -> LoadMoreCell? {
@@ -139,7 +133,7 @@ extension ListViewController {
     private var commentsSection: Int { 0 }
     
     func numberOfRenderedComments() -> Int {
-        tableView.numberOfSections == 0 ? 0 : tableView.numberOfRows(inSection: commentsSection)
+        numberOfRows(in: commentsSection)
     }
     
     func commentMessage(at row: Int) -> String? {

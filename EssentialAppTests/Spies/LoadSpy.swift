@@ -38,6 +38,7 @@ class LoaderSpy: FeedImageDataLoader {
             self?.loadMoreRequests.append(publisher)
             return publisher.eraseToAnyPublisher()
         }))
+        feedRequests[index].send(completion: .finished)
     }
     
     func completeLoadMore(with feed: [FeedImage] = [], lastPage: Bool = false, at index: Int = 0) {
