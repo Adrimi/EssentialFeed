@@ -1,7 +1,7 @@
 
 name: CI-macOS
 
-# Controls when the action will run. 
+# Controls when the action will run.
 # Triggers the workflow on pull request events but only for the master branch.
 on:
   pull_request:
@@ -23,7 +23,7 @@ jobs:
 
     - name: Select Xcode
       run: sudo xcode-select -switch /Applications/Xcode_13.0.app
-      
+
     - name: Xcode version
       run: /usr/bin/xcodebuild -version
 
