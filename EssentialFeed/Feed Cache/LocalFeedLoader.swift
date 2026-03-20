@@ -19,70 +19,39 @@ public final class LocalFeedLoader {
 
 // MARK: - Save extension
 extension LocalFeedLoader: FeedCache {
-    public typealias SaveResult = Result<Void, Error>
-    
-    public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
-        store.deleteCachedFeed { [weak self] deleetionResult in
-            guard let self = self else { return }
-            
-            switch deleetionResult {
-            case .success:
-                self.cache(feed, with: completion)
-            case let .failure(error):
-                completion(.failure(error))
-            }
-        }
+    public func save(_ feed: [FeedImage]) async throws {
+        try await store.deleteCachedFeed()
+        try await cache(feed)
     }
     
-    private func cache(_ items: [FeedImage], with completion: @escaping (SaveResult) -> Void) {
-        store.insert(items.toLocal(), timestamp: self.currentDate()) { [weak self] insertionResult in
-            guard self != nil else { return }
-            completion(insertionResult)
-        }
+    private func cache(_ items: [FeedImage]) async throws {
+        try await store.insert(items.toLocal(), timestamp: currentDate())
     }
 }
 
 // MARK: - Load extension
 extension LocalFeedLoader {
-    public typealias LoadResult = Swift.Result<[FeedImage], Swift.Error>
-    
-    public func load(completion: @escaping (LoadResult) -> Void)  {
-        store.retrieve { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case let .failure(error):
-                completion(.failure(error))
-             
-            case let .success(.some(cache)) where FeedCachePolicy.validate(cache.timestamp, against: self.currentDate()):
-                completion(.success(cache.feed.toModels()))
-                
-            case .success(.some), .success(.none):
-                completion(.success([]))
-                
-            }
+    public func load() async throws -> [FeedImage] {
+        switch try await store.retrieve() {
+        case let .some(cache) where FeedCachePolicy.validate(cache.timestamp, against: currentDate()):
+            return cache.feed.toModels()
+
+        case .some, .none:
+            return []
         }
     }
 }
 
 // MARK: - Validate extension
 extension LocalFeedLoader {
-    public typealias ValidationResult = Result<Void, Error>
-    
-    public func validateCache(completion: @escaping (ValidationResult) -> Void) {
-        store.retrieve { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .failure:
-                self.store.deleteCachedFeed(completion: completion)
-                
-            case let .success(.some(cache)) where !FeedCachePolicy.validate(cache.timestamp, against: self.currentDate()):
-                self.store.deleteCachedFeed(completion: completion)
-                
-            case .success:
-                completion(.success(()))
+    public func validateCache() async throws {
+        do {
+            if let cache = try await store.retrieve(),
+               !FeedCachePolicy.validate(cache.timestamp, against: currentDate()) {
+                try await store.deleteCachedFeed()
             }
+        } catch {
+            try await store.deleteCachedFeed()
         }
     }
 }

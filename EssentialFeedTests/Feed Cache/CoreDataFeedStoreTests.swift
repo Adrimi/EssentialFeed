@@ -10,76 +10,76 @@ import EssentialFeed
 
 class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     
-    func test_retrieve_deliversEmptyOnEmptyCache() {
+    func test_retrieve_deliversEmptyOnEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
+        await assertThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
     }
     
-    func test_retrieve_hasNoSideEffectsOnEmptyCache() {
+    func test_retrieve_hasNoSideEffectsOnEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatRetrieveHasNoSideEffectsOnEmptyCache(on: sut)
+        await assertThatRetrieveHasNoSideEffectsOnEmptyCache(on: sut)
     }
     
-    func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
+    func test_retrieve_deliversFoundValuesOnNonEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
+        await assertThatRetrieveDeliversFoundValuesOnNonEmptyCache(on: sut)
     }
     
-    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
+    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatRetrieveHasNoSideEffectsOnNonEmptyCache(on: sut)
+        await assertThatRetrieveHasNoSideEffectsOnNonEmptyCache(on: sut)
     }
     
-    func test_insert_deliversNoErrorOnEmptyCache() {
+    func test_insert_deliversNoErrorOnEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatInsertDeliversNoErrorOnEmptyCache(on: sut)
+        await assertThatInsertDeliversNoErrorOnEmptyCache(on: sut)
     }
     
-    func test_insert_deliversNoErrorOnNonEmptyCache() {
+    func test_insert_deliversNoErrorOnNonEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatInsertDeliversNoErrorOnNonEmptyCache(on: sut)
+        await assertThatInsertDeliversNoErrorOnNonEmptyCache(on: sut)
     }
     
-    func test_insert_overridesPreviouslyInsertedCacheValues() {
+    func test_insert_overridesPreviouslyInsertedCacheValues() async {
         let sut = makeSUT()
         
-        assertThatInsertOverridesPreviouslyInsertedCacheValues(on: sut)
+        await assertThatInsertOverridesPreviouslyInsertedCacheValues(on: sut)
     }
     
-    func test_delete_deliversNoErrorOnEmptyCache() {
+    func test_delete_deliversNoErrorOnEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatDeleteDeliversNoErrorOnNonEmptyCache(on: sut)
+        await assertThatDeleteDeliversNoErrorOnNonEmptyCache(on: sut)
     }
     
-    func test_delete_hasNoSideEffectsOnEmptyCache() {
+    func test_delete_hasNoSideEffectsOnEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatDeleteHasNoSideEffectsOnEmptyCache(on: sut)
+        await assertThatDeleteHasNoSideEffectsOnEmptyCache(on: sut)
     }
     
-    func test_delete_deliversNoErrorOnNonEmptyCache() {
+    func test_delete_deliversNoErrorOnNonEmptyCache() async {
         let sut = makeSUT()
         
-        assertThatDeleteDeliversNoErrorOnNonEmptyCache(on: sut)
+        await assertThatDeleteDeliversNoErrorOnNonEmptyCache(on: sut)
     }
     
-    func test_delete_emptiesPreviouslyInsertedCache() {
+    func test_delete_emptiesPreviouslyInsertedCache() async {
         let sut = makeSUT()
         
-        assertThatDeleteEmptiesPreviouslyInsertedCache(on: sut)
+        await assertThatDeleteEmptiesPreviouslyInsertedCache(on: sut)
     }
     
-    func test_storeSideEffects_runSerially() {
+    func test_storeSideEffects_runSerially() async {
         let sut = makeSUT()
         
-        assertThatSideEffectsRunSerially(on: sut)
+        await assertThatSideEffectsRunSerially(on: sut)
     }
     
     // - MARK: Helpers

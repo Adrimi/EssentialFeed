@@ -8,22 +8,11 @@
 import os
 import UIKit
 import CoreData
-import Combine
 import EssentialFeed
 import EssentialFeediOS
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    
-    private lazy var scheduler: AnyDispatchQueueScheduler = DispatchQueue(
-        label: "com.adrimi.infra.queue",
-        qos: .userInitiated,
-        attributes: .concurrent
-    ).eraseToAnyScheduler()
-    
-    private lazy var feedURL: URL = {
-        FeedEndpoint.get().url(baseURL: baseURL)
-    }()
     
     private lazy var logger = Logger(subsystem: "com.adrimi.EssentialAppCaseStudy", category: "main")
     
@@ -57,11 +46,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 selection: showComments))
     }()
     
-    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore, scheduler: AnyDispatchQueueScheduler) {
+    convenience init(httpClient: HTTPClient, store: FeedStore & FeedImageDataStore) {
         self.init()
         self.httpClient = httpClient
         self.store = store
-        self.scheduler = scheduler
     }
     
     /// Ideally you would like to call this method, but you can't. Thus all logis, that I implement are moved to `configureWindow` method
@@ -83,42 +71,44 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
-        localFeedLoader.validateCache { _ in }
-    }
-    
-    private func makeRemoteCommentsLoader(url: URL) -> () -> AnyPublisher<[ImageComment], Error> {
-        { [httpClient] in
-            httpClient
-                .getPublisher(url: url)
-                .tryMap(ImageCommentsMapper.map)
-                .eraseToAnyPublisher()
+        Task {
+            try? await localFeedLoader.validateCache()
         }
     }
     
-    private func makeRemoteFeedloaderWithLocalFallback() -> AnyPublisher<Paginated<FeedImage>, Error> {
-        makeRemoteFeedLoader()
-            .caching(to: localFeedLoader)
-            .fallback(to: localFeedLoader.loadPublisher)
-            .map(makeFirstPage)
-            .eraseToAnyPublisher()
-    }
-    private func makeRemoteLoadMoreLoader(last: FeedImage?) -> AnyPublisher<Paginated<FeedImage>, Error> {
-        localFeedLoader.loadPublisher()
-            .zip(makeRemoteFeedLoader(after: last))
-            .map { (cachedItems, newItems) in
-                (cachedItems + newItems, newItems.last)
-            }
-            .map(makePage)
-            .caching(to: localFeedLoader)
+    private func makeRemoteCommentsLoader(url: URL) -> () async throws -> [ImageComment] {
+        { [httpClient] in
+            let (data, response) = try await httpClient.get(from: url)
+            return try ImageCommentsMapper.map(data, from: response)
+        }
     }
     
-    private func makeRemoteFeedLoader(after image: FeedImage? = nil) -> AnyPublisher<[FeedImage], Error> {
+    private func makeRemoteFeedloaderWithLocalFallback() async throws -> Paginated<FeedImage> {
+        do {
+            let items = try await makeRemoteFeedLoader()
+            try? await localFeedLoader.save(items)
+            return makeFirstPage(items: items)
+        } catch {
+            return makeFirstPage(items: try await localFeedLoader.load())
+        }
+    }
+
+    private func makeRemoteLoadMoreLoader(last: FeedImage?) async throws -> Paginated<FeedImage> {
+        async let cachedItems = localFeedLoader.load()
+        async let newItems = makeRemoteFeedLoader(after: last)
+
+        let cached = try await cachedItems
+        let new = try await newItems
+        let merged = cached + new
+        let page = makePage(items: merged, last: new.last)
+        try? await localFeedLoader.save(merged)
+        return page
+    }
+    
+    private func makeRemoteFeedLoader(after image: FeedImage? = nil) async throws -> [FeedImage] {
         let url = FeedEndpoint.get(after: image).url(baseURL: baseURL)
-        
-        return httpClient
-            .getPublisher(url: url)
-            .tryMap(FeedItemsMapper.map)
-            .eraseToAnyPublisher()
+        let (data, response) = try await httpClient.get(from: url)
+        return try FeedItemsMapper.map(data, from: response)
     }
 
     private func makeFirstPage(items: [FeedImage]) -> Paginated<FeedImage> {
@@ -128,26 +118,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func makePage(items: [FeedImage], last: FeedImage?) -> Paginated<FeedImage> {
         Paginated(
             items: items,
-            loadMorePublisher: last.map { last in
-                { self.makeRemoteLoadMoreLoader(last: last) }
+            loadMore: last.map { last in
+                { try await self.makeRemoteLoadMoreLoader(last: last) }
             }
         )
     }
     
-    private func makeLocalImageLoaderWithRemoteFallback(url: URL) -> FeedImageDataLoader.Publisher {
+    private func makeLocalImageLoaderWithRemoteFallback(url: URL) async throws -> Data {
         let localImageLoader = LocalFeedImageDataLoader(store: store)
 
-        return localImageLoader
-            .loadImageDataPublisher(from: url)
-            .fallback(to: { [httpClient, scheduler] in
-                httpClient
-                    .getPublisher(url: url)
-                    .tryMap(FeedImageDataMapper.map)
-                    .caching(to: localImageLoader, using: url)
-                    .subscribe(on: scheduler)
-                    .eraseToAnyPublisher()
-            })
-            .subscribe(on: scheduler)
-            .eraseToAnyPublisher()
+        do {
+            return try await localImageLoader.loadImageData(from: url)
+        } catch {
+            let (data, response) = try await httpClient.get(from: url)
+            let imageData = try FeedImageDataMapper.map(data, from: response)
+            try? await localImageLoader.save(imageData, for: url)
+            return imageData
+        }
     }
 }

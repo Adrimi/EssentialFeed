@@ -2,18 +2,19 @@
 //  Created by Adrian Szymanowski on 16/01/2021.
 //
 
-import Combine
+import Foundation
 import EssentialFeed
 import EssentialFeediOS
 
 final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
-    private let loader: () -> AnyPublisher<Resource, Error>
-    private var cancellable: Cancellable?
+    private let loader: () async throws -> Resource
+    private var task: Task<Void, Never>?
+    private var activeTaskID: UUID?
     private var isLoading = false
     
     var presenter: LoadResourcePresenter<Resource, View>?
     
-    init(loader: @escaping () -> AnyPublisher<Resource, Error>) {
+    init(loader: @escaping () async throws -> Resource) {
         self.loader = loader
     }
     
@@ -22,25 +23,54 @@ final class LoadResourcePresentationAdapter<Resource, View: ResourceView> {
         
         presenter?.didStartLoading()
         isLoading = true
-        
-        cancellable = loader()
-            .dispatchOnMainQueue()
-            .handleEvents(receiveCancel: { [weak self] in
-                self?.isLoading = false
-            })
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    switch completion {
-                    case .finished: break
-                        
-                    case let .failure(error):
-                        self?.presenter?.didFinishLoading(with: error)
-                    }
-                    
-                    self?.isLoading = false
-                }, receiveValue: { [weak self] resource in
-                    self?.presenter?.didFinishLoading(with: resource)
-                })
+        let taskID = UUID()
+        activeTaskID = taskID
+
+        task = Task { [weak self] in
+            do {
+                guard let self else { return }
+                let resource = try await self.loader()
+                await self.finishLoading(taskID: taskID, with: .success(resource))
+            } catch is CancellationError {
+                guard let self else { return }
+                await self.cancelLoading(taskID: taskID)
+            } catch {
+                guard let self else { return }
+                await self.finishLoading(taskID: taskID, with: .failure(error))
+            }
+        }
+    }
+
+    private func finishLoading(taskID: UUID, with result: Result<Resource, Error>) async {
+        await MainActor.run { [weak self] in
+            guard let self, self.activeTaskID == taskID else { return }
+
+            switch result {
+            case let .success(resource):
+                presenter?.didFinishLoading(with: resource)
+            case let .failure(error):
+                presenter?.didFinishLoading(with: error)
+            }
+
+            reset()
+        }
+    }
+
+    private func cancelLoading(taskID: UUID) async {
+        await MainActor.run { [weak self] in
+            guard let self, self.activeTaskID == taskID else { return }
+            reset()
+        }
+    }
+
+    private func reset() {
+        task = nil
+        activeTaskID = nil
+        isLoading = false
+    }
+
+    deinit {
+        task?.cancel()
     }
 }
 
@@ -50,7 +80,7 @@ extension LoadResourcePresentationAdapter: FeedImageCellControllerDelegate {
     }
     
     func didCancelImageRequest() {
-        cancellable?.cancel()
-        cancellable = nil
+        task?.cancel()
+        reset()
     }
 }

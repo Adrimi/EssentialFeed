@@ -36,16 +36,17 @@ public final class CoreDataFeedStore {
         }
     }
     
-    func performAsync(_ action: @escaping (NSManagedObjectContext) -> Void) {
+    func perform<R>(_ action: @escaping (NSManagedObjectContext) throws -> R) async throws -> R {
         let context = self.context
-        context.perform { action(context) }
-    }
-    
-    func performSync<R>(_ action: (NSManagedObjectContext) -> Result<R, Error>) throws -> R {
-        let context = self.context
-        var result: Result<R, Error>!
-        context.performAndWait { result = action(context) }
-        return try result.get()
+        return try await withCheckedThrowingContinuation { continuation in
+            context.perform {
+                do {
+                    continuation.resume(returning: try action(context))
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
     
     private func cleanUpReferencesToPersistentStores() {

@@ -6,18 +6,13 @@ import Foundation
 import EssentialFeed
 
 class NullStore: FeedStore & FeedImageDataStore {
-    func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-        completion(.success(()))
-    }
+    func deleteCachedFeed() async throws {}
     
-    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-        completion(.success(()))
-    }
+    func insert(_ feed: [LocalFeedImage], timestamp: Date) async throws {}
     
-    func retrieve(completion: @escaping RetrievalCompletion) {
-        completion(.success(.none))
-    }
+    func retrieve() async throws -> CachedFeed? { .none }
     
-    func insert(_ data: Data, for url: URL) {}
-    func retrieve(dataForURL url: URL) throws -> Data? { .none }
+    func insert(_ data: Data, for url: URL) async throws {}
+
+    func retrieve(dataForURL url: URL) async throws -> Data? { .none }
 }

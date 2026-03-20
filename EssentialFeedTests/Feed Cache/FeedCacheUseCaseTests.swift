@@ -16,88 +16,76 @@ class FeedCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [])
     }
     
-    func test_save_requestCacheDeletion() {
+    func test_save_requestCacheDeletion() async {
         let (sut, store) = makeSUT()
         
-        sut.save(uniqueImageFeed().models) { _ in }
+        let task = Task {
+            try? await sut.save(uniqueImageFeed().models)
+        }
+        await waitForStoreOperation()
         
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
+        store.completeDeletion(with: anyNSError())
+        _ = await task.result
     }
     
-    func test_save_doesNotRequestCacheInsertionOnDeletionError() {
+    func test_save_doesNotRequestCacheInsertionOnDeletionError() async {
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
         
-        sut.save(uniqueImageFeed().models) { _ in }
+        let task = Task {
+            try? await sut.save(uniqueImageFeed().models)
+        }
+        await waitForStoreOperation()
         store.completeDeletion(with: deletionError)
+        _ = await task.result
         
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed])
     }
     
-    func test_save_doesRequestCacheInsertion_withTimestamp_OnDeletionSuccess() {
+    func test_save_doesRequestCacheInsertion_withTimestamp_OnDeletionSuccess() async {
         let timestamp = Date()
         let (sut, store) = makeSUT(currentDate: { timestamp })
         let feed = uniqueImageFeed()
         
-        sut.save(feed.models) { _ in }
+        let task = Task {
+            try? await sut.save(feed.models)
+        }
+        await waitForStoreOperation()
         store.completeDeletionSuccessfully()
+        await waitForStoreOperation()
         
         XCTAssertEqual(store.receivedMessages, [.deleteCachedFeed, .insert(feed.local, timestamp)])
+        store.completeInsertionSuccessfully()
+        _ = await task.result
     }
     
-    func test_save_failsOnDeletionError() {
+    func test_save_failsOnDeletionError() async {
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
         
-        expect(sut, toCompleteWithError: deletionError, when: {
+        await expect(sut, toCompleteWithError: deletionError, when: {
             store.completeDeletion(with: deletionError)
         })
     }
     
-    func test_save_failsOnInsertionError() {
+    func test_save_failsOnInsertionError() async {
         let (sut, store) = makeSUT()
         let insertionError = anyNSError()
         
-        expect(sut, toCompleteWithError: insertionError, when: {
+        await expect(sut, toCompleteWithError: insertionError, when: {
             store.completeDeletionSuccessfully()
             store.completeInsertion(with: insertionError)
         })
     }
     
-    func test_save_succedsOnSuccessfulCacheInsertion() {
+    func test_save_succedsOnSuccessfulCacheInsertion() async {
         let (sut, store) = makeSUT()
         
-        expect(sut, toCompleteWithError: nil, when: {
+        await expect(sut, toCompleteWithError: nil, when: {
             store.completeDeletionSuccessfully()
             store.completeInsertionSuccessfully()
         })
-    }
-    
-    func test_save_doesNotDeliverDeletionError_afterSUTInstanceBeenDeallocated() {
-        let store = FeedStoreSpy()
-        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
-        
-        var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save(uniqueImageFeed().models) { error in receivedResults.append(error) }
-        
-        sut = nil
-        store.completeDeletion(with: anyNSError())
-        
-        XCTAssertTrue(receivedResults.isEmpty)
-    }
-    
-    func test_save_doesNotDeliverInsertionError_afterSUTInstanceBeenDeallocated() {
-        let store = FeedStoreSpy()
-        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: Date.init)
-        
-        var receivedResults = [LocalFeedLoader.SaveResult]()
-        sut?.save(uniqueImageFeed().models) { error in receivedResults.append(error) }
-        
-        store.completeDeletionSuccessfully()
-        sut = nil
-        store.completeInsertion(with: anyNSError())
-        
-        XCTAssertTrue(receivedResults.isEmpty)
     }
 
     
@@ -111,21 +99,27 @@ class FeedCacheUseCaseTests: XCTestCase {
         return (sut, store)
     }
     
-    private func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: NSError?, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let exp = expectation(description: "Wait for completion")
-        
-        var receivedError: Error?
-        sut.save(uniqueImageFeed().models) { result in
-            if case let Result.failure(error) = result {
-                receivedError = error
+    private func expect(_ sut: LocalFeedLoader, toCompleteWithError expectedError: NSError?, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) async {
+        let task = Task { () -> Error? in
+            do {
+                try await sut.save(uniqueImageFeed().models)
+                return nil
+            } catch {
+                return error
             }
-            exp.fulfill()
         }
 
+        await waitForStoreOperation()
         action()
-        wait(for: [exp], timeout: 1.0)
+        let receivedError = await task.value
         
         XCTAssertEqual(receivedError as NSError?, expectedError, file: file, line: line)
+    }
+
+    private func waitForStoreOperation() async {
+        for _ in 0..<5 {
+            await Task.yield()
+        }
     }
     
 }

@@ -9,27 +9,61 @@ import Foundation
 import EssentialFeed
 
 class HTTPClientSpy: HTTPClient {
-    private struct Task: HTTPClientTask {
-        let callback: () -> Void
-        func cancel() { callback() }
+    private final class Request {
+        let url: URL
+        private let lock = NSLock()
+        private var continuation: CheckedContinuation<(Data, HTTPURLResponse), Error>?
+
+        init(url: URL) {
+            self.url = url
+        }
+
+        func store(_ continuation: CheckedContinuation<(Data, HTTPURLResponse), Error>) {
+            lock.lock()
+            self.continuation = continuation
+            lock.unlock()
+        }
+
+        func resume(with result: Result<(Data, HTTPURLResponse), Error>) {
+            lock.lock()
+            let continuation = self.continuation
+            self.continuation = nil
+            lock.unlock()
+
+            guard let continuation else { return }
+
+            switch result {
+            case let .success(value):
+                continuation.resume(returning: value)
+            case let .failure(error):
+                continuation.resume(throwing: error)
+            }
+        }
     }
     
-    private var messages = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
+    private var messages = [Request]()
     private(set) var cancelledURLs = [URL]()
     
     var requestedURLs: [URL] {
         messages.map(\.url)
     }
     
-    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        messages.append((url, completion))
-        return Task { [weak self] in
+    func get(from url: URL) async throws -> (Data, HTTPURLResponse) {
+        let request = Request(url: url)
+        messages.append(request)
+
+        return try await withTaskCancellationHandler(operation: {
+            try await withCheckedThrowingContinuation { continuation in
+                request.store(continuation)
+            }
+        }, onCancel: { [weak self] in
             self?.cancelledURLs.append(url)
-        }
+            request.resume(with: .failure(CancellationError()))
+        })
     }
     
     func complete(with error: Error, at index: Int = 0) {
-        messages[index].completion(.failure(error))
+        messages[index].resume(with: .failure(error))
     }
     
     func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
@@ -38,7 +72,6 @@ class HTTPClientSpy: HTTPClient {
             statusCode: code,
             httpVersion: nil,
             headerFields: nil)!
-        messages[index].completion(.success((data, response)))
+        messages[index].resume(with: .success((data, response)))
     }
 }
-

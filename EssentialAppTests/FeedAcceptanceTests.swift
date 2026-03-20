@@ -7,10 +7,11 @@ import EssentialFeed
 import EssentialFeediOS
 @testable import EssentialApp
 
-class FeedAcceptanceTests: XCTestCase {
+@MainActor
+final class FeedAcceptanceTests: XCTestCase {
     
-    func test_onLaunch_displaysRemoteFeedWhenCustomerHasConnectivity() {
-        let feed = launch(httpClient: .online(responseMapper), store: .empty)
+    func test_onLaunch_displaysRemoteFeedWhenCustomerHasConnectivity() async {
+        let feed = await launch(httpClient: .online(responseMapper), store: .empty)
         
         XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 2)
         XCTAssertEqual(feed.renderedFeedImageData(at: 0), makeImageData0())
@@ -18,6 +19,7 @@ class FeedAcceptanceTests: XCTestCase {
         XCTAssertTrue(feed.canLoadMoreFeed)
         
         feed.simulateLoadMoreFeedAction()
+        await waitForUIToUpdate()
         
         XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 3)
         XCTAssertEqual(feed.renderedFeedImageData(at: 0), makeImageData0())
@@ -26,6 +28,7 @@ class FeedAcceptanceTests: XCTestCase {
         XCTAssertTrue(feed.canLoadMoreFeed)
         
         feed.simulateLoadMoreFeedAction()
+        await waitForUIToUpdate()
         
         XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 3)
         XCTAssertEqual(feed.renderedFeedImageData(at: 0), makeImageData0())
@@ -34,16 +37,20 @@ class FeedAcceptanceTests: XCTestCase {
         XCTAssertFalse(feed.canLoadMoreFeed)
     }
     
-    func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() {
+    func test_onLaunch_displaysCachedRemoteFeedWhenCustomerHasNoConnectivity() async {
         let sharedStore = InMemoryFeedStore.empty
         
-        let onlineFeed = launch(httpClient: .online(responseMapper), store: sharedStore)
+        let onlineFeed = await launch(httpClient: .online(responseMapper), store: sharedStore)
         onlineFeed.simulateFeedImageViewVisible(at: 0)
+        await waitForUIToUpdate()
         onlineFeed.simulateFeedImageViewVisible(at: 1)
+        await waitForUIToUpdate()
         onlineFeed.simulateLoadMoreFeedAction()
+        await waitForUIToUpdate()
         onlineFeed.simulateFeedImageViewVisible(at: 2)
+        await waitForUIToUpdate()
         
-        let offlineFeed = launch(httpClient: .offline, store: sharedStore)
+        let offlineFeed = await launch(httpClient: .offline, store: sharedStore)
         
         XCTAssertEqual(offlineFeed.numberOfRenderedFeedImageViews(), 3)
         XCTAssertEqual(offlineFeed.renderedFeedImageData(at: 0), makeImageData0())
@@ -51,30 +58,30 @@ class FeedAcceptanceTests: XCTestCase {
         XCTAssertEqual(offlineFeed.renderedFeedImageData(at: 2), makeImageData2())
     }
     
-    func test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache() {
-        let feed = launch(httpClient: .offline, store: .empty)
+    func test_onLaunch_displaysEmptyFeedWhenCustomerHasNoConnectivityAndNoCache() async {
+        let feed = await launch(httpClient: .offline, store: .empty)
         
         XCTAssertEqual(feed.numberOfRenderedFeedImageViews(), 0)
     }
     
-    func test_onEnteringBackground_deletesExpiredFeedCache() {
+    func test_onEnteringBackground_deletesExpiredFeedCache() async {
         let store = InMemoryFeedStore.withExpiredCache
         
-        enterBackground(with: store)
+        await enterBackground(with: store)
         
         XCTAssertNil(store.feedCache, "Expected to delete expired cache")
     }
     
-    func test_onEnteringBackground_keepsNonExpiredFeedCache() {
+    func test_onEnteringBackground_keepsNonExpiredFeedCache() async {
         let store = InMemoryFeedStore.withNonExpiredCache
         
-        enterBackground(with: store)
+        await enterBackground(with: store)
         
         XCTAssertNotNil(store.feedCache, "Expected to keep not expired cache")
     }
     
-    func test_onFeedImageSelection_displaysComments() {
-        let comments = showCommentsForFirstImage()
+    func test_onFeedImageSelection_displaysComments() async {
+        let comments = await showCommentsForFirstImage()
         
         XCTAssertEqual(comments.numberOfRenderedComments(), 1)
         XCTAssertEqual(comments.commentMessage(at: 0), makeCommentMessage())
@@ -85,44 +92,41 @@ class FeedAcceptanceTests: XCTestCase {
     private func launch(
         httpClient: HTTPClientStub = .offline,
         store: InMemoryFeedStore = .empty
-    ) -> ListViewController {
-        let sut = SceneDelegate(httpClient: httpClient, store: store, scheduler: .immediateOnMainQueue)
+    ) async -> ListViewController {
+        let sut = SceneDelegate(httpClient: httpClient, store: store)
         sut.window = UIWindow(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
         sut.configureWindow()
+        await waitForUIToUpdate()
         
         let nav = sut.window?.rootViewController as? UINavigationController
         return nav?.topViewController as! ListViewController
     }
     
-    private func enterBackground(with store: InMemoryFeedStore) {
-        let sut = SceneDelegate(httpClient: HTTPClientStub.offline, store: store, scheduler: .immediateOnMainQueue)
+    private func enterBackground(with store: InMemoryFeedStore) async {
+        let sut = SceneDelegate(httpClient: HTTPClientStub.offline, store: store)
         sut.sceneWillResignActive(UIApplication.shared.connectedScenes.first!)
+        await waitForUIToUpdate()
     }
     
-    private func showCommentsForFirstImage() -> ListViewController {
-        let feed = launch(httpClient: .online(responseMapper), store: .empty)
+    private func showCommentsForFirstImage() async -> ListViewController {
+        let feed = await launch(httpClient: .online(responseMapper), store: .empty)
         
         feed.simulateTapOnFeedImage(at: 0)
-        RunLoop.main.run(until: Date())
+        await waitForUIToUpdate()
         
         let nav = feed.navigationController
         return nav?.topViewController as! ListViewController
     }
     
     private class HTTPClientStub: HTTPClient {
-        private class Task: HTTPClientTask {
-            func cancel() {}
-        }
+        private let stub: (URL) -> Result<(Data, HTTPURLResponse), Error>
         
-        private let stub: (URL) -> HTTPClient.Result
-        
-        init(stub: @escaping (URL) -> HTTPClient.Result) {
+        init(stub: @escaping (URL) -> Result<(Data, HTTPURLResponse), Error>) {
             self.stub = stub
         }
         
-        func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-            completion(stub(url))
-            return Task()
+        func get(from url: URL) async throws -> (Data, HTTPURLResponse) {
+            try stub(url).get()
         }
         
         static var offline: HTTPClientStub {
@@ -142,25 +146,23 @@ class FeedAcceptanceTests: XCTestCase {
             self.feedCache = feedCache
         }
         
-        func deleteCachedFeed(completion: @escaping FeedStore.DeletionCompletion) {
+        func deleteCachedFeed() async throws {
             feedCache = nil
-            completion(.success(()))
         }
         
-        func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
+        func insert(_ feed: [LocalFeedImage], timestamp: Date) async throws {
             feedCache = CachedFeed(feed: feed, timestamp: timestamp)
-            completion(.success(()))
         }
         
-        func retrieve(completion: @escaping FeedStore.RetrievalCompletion) {
-            completion(.success(feedCache))
+        func retrieve() async throws -> CachedFeed? {
+            feedCache
         }
         
-        func insert(_ data: Data, for url: URL) throws {
+        func insert(_ data: Data, for url: URL) async throws {
             feedImageDataCache[url] = data
         }
 
-        func retrieve(dataForURL url: URL) throws -> Data? {
+        func retrieve(dataForURL url: URL) async throws -> Data? {
             feedImageDataCache[url]
         }
         
@@ -249,6 +251,12 @@ class FeedAcceptanceTests: XCTestCase {
     
     private func makeCommentMessage() -> String {
         "a message"
+    }
+
+    private func waitForUIToUpdate(times: Int = 3) async {
+        for _ in 0..<times {
+            await Task.yield()
+        }
     }
 
 }

@@ -13,29 +13,34 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         XCTAssert(store.receivedMessages.isEmpty)
     }
     
-    func test_saveImageDataForURL_requestsImageDataInsertionForURL() {
+    func test_saveImageDataForURL_requestsImageDataInsertionForURL() async {
         let (sut, store) = makeSUT()
         let url = anyURL()
         let data = anyData()
         
-        try? sut.save(data, for: url)
+        let task = Task {
+            try? await sut.save(data, for: url)
+        }
+        await Task.yield()
         
         XCTAssertEqual(store.receivedMessages, [.insert(data: data, for: url)])
+        store.completeInsertionSuccessfully()
+        _ = await task.result
     }
     
-    func test_saveImageDataFromURL_failsOnStoreInsertionError() {
+    func test_saveImageDataFromURL_failsOnStoreInsertionError() async {
         let (sut, store) = makeSUT()
         
-        expect(sut, toCompleteWith: failed(), when: {
+        await expect(sut, toCompleteWith: failed(), when: {
             let insertionError = anyNSError()
             store.completeInsertion(with: insertionError)
         })
     }
     
-    func test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion() {
+    func test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion() async {
         let (sut, store) = makeSUT()
         
-        expect(sut, toCompleteWith: .success(()), when: {
+        await expect(sut, toCompleteWith: .success(()), when: {
             store.completeInsertionSuccessfully()
         })
     }
@@ -54,10 +59,20 @@ class CacheFeedImageDataUseCaseTests: XCTestCase {
         .failure(LocalFeedImageDataLoader.SaveError.failed)
     }
     
-    private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: Result<Void, Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: Result<Void, Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) async {
+        let task = Task { () -> Result<Void, Error> in
+            do {
+                try await sut.save(anyData(), for: anyURL())
+                return .success(())
+            } catch {
+                return .failure(error)
+            }
+        }
+
+        await Task.yield()
         action()
 
-        let receivedResult = Result { try sut.save(anyData(), for: anyURL()) }
+        let receivedResult = await task.value
         switch (receivedResult, expectedResult) {
         case (.success, .success):
             break

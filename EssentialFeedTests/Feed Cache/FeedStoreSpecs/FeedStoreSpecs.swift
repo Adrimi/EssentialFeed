@@ -6,36 +6,36 @@
 //
 
 protocol FeedStoreSpecs {
-    func test_retrieve_deliversEmptyOnEmptyCache()
-    func test_retrieve_hasNoSideEffectsOnEmptyCache()
-    func test_retrieve_deliversFoundValuesOnNonEmptyCache()
-    func test_retrieve_hasNoSideEffectsOnNonEmptyCache()
+    func test_retrieve_deliversEmptyOnEmptyCache() async
+    func test_retrieve_hasNoSideEffectsOnEmptyCache() async
+    func test_retrieve_deliversFoundValuesOnNonEmptyCache() async
+    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() async
     
-    func test_insert_deliversNoErrorOnEmptyCache()
-    func test_insert_deliversNoErrorOnNonEmptyCache()
-    func test_insert_overridesPreviouslyInsertedCacheValues()
+    func test_insert_deliversNoErrorOnEmptyCache() async
+    func test_insert_deliversNoErrorOnNonEmptyCache() async
+    func test_insert_overridesPreviouslyInsertedCacheValues() async
     
-    func test_delete_deliversNoErrorOnEmptyCache()
-    func test_delete_hasNoSideEffectsOnEmptyCache()
-    func test_delete_deliversNoErrorOnNonEmptyCache()
-    func test_delete_emptiesPreviouslyInsertedCache()
+    func test_delete_deliversNoErrorOnEmptyCache() async
+    func test_delete_hasNoSideEffectsOnEmptyCache() async
+    func test_delete_deliversNoErrorOnNonEmptyCache() async
+    func test_delete_emptiesPreviouslyInsertedCache() async
     
-    func test_storeSideEffects_runSerially()
+    func test_storeSideEffects_runSerially() async
 }
 
 protocol FailableRetrieveFeedStoreSpecs: FeedStoreSpecs {
-    func test_retrieve_deliversFailureOnRretrievalError()
-    func test_retrieve_hasNoSideEffectsOnFailure()
+    func test_retrieve_deliversFailureOnRretrievalError() async
+    func test_retrieve_hasNoSideEffectsOnFailure() async
 }
 
 protocol FailableInsertFeedStoreSpecs: FeedStoreSpecs {
-    func test_insert_deliversErrorOnInsertionError()
-    func test_insert_hasNoSideEffectsOnInsertionError()
+    func test_insert_deliversErrorOnInsertionError() async
+    func test_insert_hasNoSideEffectsOnInsertionError() async
 }
 
 protocol FailableDeleteFeedStoreSpecs: FeedStoreSpecs {
-    func test_delete_deliversErrorOnDeletionError()
-    func test_delete_hasNoSideEffectsOnDeletionError()
+    func test_delete_deliversErrorOnDeletionError() async
+    func test_delete_hasNoSideEffectsOnDeletionError() async
 }
 
 typealias FailableFeedStoreSpecs = FailableRetrieveFeedStoreSpecs & FailableInsertFeedStoreSpecs & FailableDeleteFeedStoreSpecs

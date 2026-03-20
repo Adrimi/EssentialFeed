@@ -13,37 +13,42 @@ class LocalFeedImageDataFromCacheUseCaseTests: XCTestCase {
         XCTAssertTrue(store.receivedMessages.isEmpty)
     }
     
-    func test_loadImageDataFromURL_requestsStoredDataFromURL() {
+    func test_loadImageDataFromURL_requestsStoredDataFromURL() async {
         let (sut, store) = makeSUT()
         let url = anyURL()
         
-        _ = try? sut.loadImageData(from: url)
+        let task = Task {
+            try? await sut.loadImageData(from: url)
+        }
+        await Task.yield()
         
         XCTAssertEqual(store.receivedMessages, [.retrieve(dataFor: url)])
+        store.completeRetrieval(with: .none)
+        _ = await task.result
     }
     
-    func test_loadImageDataFromURL_failsOnStoreError() {
+    func test_loadImageDataFromURL_failsOnStoreError() async {
         let (sut, store) = makeSUT()
         
-        expect(sut, toCompleteWith: failed(), when: {
+        await expect(sut, toCompleteWith: failed(), when: {
             let retrievalError = anyNSError()
             store.completeRetrieval(with: retrievalError)
         })
     }
     
-    func test_loadImageDataFromURL_deliversNotFoundErrorOnNotFound() {
+    func test_loadImageDataFromURL_deliversNotFoundErrorOnNotFound() async {
         let (sut, store) = makeSUT()
         
-        expect(sut, toCompleteWith: notFound(), when: {
+        await expect(sut, toCompleteWith: notFound(), when: {
             store.completeRetrieval(with: .none)
         })
     }
     
-    func test_loadImageDataFromURL_deliversStoreDataOnFoundData() {
+    func test_loadImageDataFromURL_deliversStoreDataOnFoundData() async {
         let (sut, store) = makeSUT()
         let foundData = anyData()
         
-        expect(sut, toCompleteWith: .success(foundData), when: {
+        await expect(sut, toCompleteWith: .success(foundData), when: {
             store.completeRetrieval(with: foundData)
         })
     }
@@ -70,10 +75,19 @@ class LocalFeedImageDataFromCacheUseCaseTests: XCTestCase {
         XCTFail("Expected no invocations", file: file, line: line)
     }
     
-    private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: Result<Data, Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: LocalFeedImageDataLoader, toCompleteWith expectedResult: Result<Data, Error>, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) async {
+        let task = Task { () -> Result<Data, Error> in
+            do {
+                return .success(try await sut.loadImageData(from: anyURL()))
+            } catch {
+                return .failure(error)
+            }
+        }
+
+        await Task.yield()
         action()
         
-        let receivedResult = Result { try sut.loadImageData(from: anyURL()) }
+        let receivedResult = await task.value
         
         switch (receivedResult, expectedResult) {
         case let (.success(receivedData), .success(expectedData)):

@@ -18,50 +18,56 @@ class FeedStoreSpy: FeedStore {
     
     private(set) var receivedMessages = [ReceivedMessage]()
     
-    private var deletionCompletion = [DeletionCompletion]()
-    private var insertionCompeltions = [InsertionCompletion]()
-    private var retrievalCompeltions = [RetrievalCompletion]()
+    private var deletionContinuations = [CheckedContinuation<Void, Error>]()
+    private var insertionContinuations = [CheckedContinuation<Void, Error>]()
+    private var retrievalContinuations = [CheckedContinuation<CachedFeed?, Error>]()
     
-    func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-        deletionCompletion.append(completion)
+    func deleteCachedFeed() async throws {
         receivedMessages.append(.deleteCachedFeed)
+        try await withCheckedThrowingContinuation { continuation in
+            deletionContinuations.append(continuation)
+        }
     }
     
     func completeDeletion(with error: Error, at index: Int = 0) {
-        deletionCompletion[index](.failure(error))
+        deletionContinuations[index].resume(throwing: error)
     }
     
     func completeDeletionSuccessfully(at index: Int = 0) {
-        deletionCompletion[index](.success(()))
+        deletionContinuations[index].resume(returning: ())
     }
     
     func completeInsertionSuccessfully(at index: Int = 0) {
-        insertionCompeltions[index](.success(()))
+        insertionContinuations[index].resume(returning: ())
     }
     
-    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-        insertionCompeltions.append(completion)
+    func insert(_ feed: [LocalFeedImage], timestamp: Date) async throws {
         receivedMessages.append(.insert(feed, timestamp))
+        try await withCheckedThrowingContinuation { continuation in
+            insertionContinuations.append(continuation)
+        }
     }
     
     func completeInsertion(with error: Error, at index: Int = 0) {
-        insertionCompeltions[index](.failure(error))
+        insertionContinuations[index].resume(throwing: error)
     }
     
-    func retrieve(completion: @escaping RetrievalCompletion) {
-        retrievalCompeltions.append(completion)
+    func retrieve() async throws -> CachedFeed? {
         receivedMessages.append(.retrieve)
+        return try await withCheckedThrowingContinuation { continuation in
+            retrievalContinuations.append(continuation)
+        }
     }
     
     func completeRetrieval(with error: Error, at index: Int = 0) {
-        retrievalCompeltions[index](.failure(error))
+        retrievalContinuations[index].resume(throwing: error)
     }
     
     func completeRetrievalWithEmptyCache(at index: Int = 0) {
-        retrievalCompeltions[index](.success(.none))
+        retrievalContinuations[index].resume(returning: .none)
     }
     
     func completeRetrieval(with feed: [LocalFeedImage], timestamp: Date, at index: Int = 0) {
-        retrievalCompeltions[index](.success(CachedFeed(feed: feed, timestamp: timestamp)))
+        retrievalContinuations[index].resume(returning: CachedFeed(feed: feed, timestamp: timestamp))
     }
 }
